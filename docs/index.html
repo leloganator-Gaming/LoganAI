@@ -1,30 +1,13 @@
 <!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090d16"><title>LoganAI</title>
-<link rel="stylesheet" href="./style.css">
-</head>
-<body>
-<div class="app">
-<aside class="sidebar">
-  <div class="brand"><div class="mark">L</div><div><b>LoganAI</b><small>Assistant expérimental</small></div></div>
-  <button id="newChat" class="secondary full">＋ Nouvelle conversation</button>
-  <div class="side-label">ESPACE</div>
-  <button class="nav active" data-panel="chat">◈ Discussion</button>
-  <button class="nav" data-panel="memory">▤ Mémoire</button>
-  <button class="nav" data-panel="about">ⓘ À propos</button>
-  <div class="side-bottom"><span class="dot"></span><span id="status">Application chargée</span></div>
-</aside>
-<main class="main">
-<header><div><span class="eyebrow">LOGANAI / GITHUB PAGES</span><h1 id="heading">Discussion</h1></div><span class="pill" id="modelState">Moteur navigateur en préparation</span></header>
-<section id="chatPanel" class="panel visible">
-  <div id="messages" class="messages"><div class="welcome"><div class="orb">L</div><h2>Bienvenue dans LoganAI.</h2><p>Cette version est conçue pour fonctionner dans votre navigateur, sans serveur de discussion.</p><div class="notice">Le moteur neuronal navigateur n'est pas encore installé. Cette page ne simule pas de réponses : la discussion sera activée lorsque le modèle compatible sera prêt.</div></div></div>
-  <form id="chatForm" class="composer"><textarea id="prompt" rows="1" maxlength="4000" placeholder="Discussion indisponible pendant la préparation du moteur…" disabled></textarea><div class="composer-bottom"><span id="composerNote">Le modèle navigateur est en préparation.</span><button class="send" type="submit" disabled>Envoyer ↑</button></div></form>
-</section>
-<section id="memoryPanel" class="panel"><div class="panel-card"><h2>Mémoire locale</h2><p>Les éléments ajoutés ici restent dans le stockage de ce navigateur. Ils ne sont pas synchronisés entre appareils.</p><form id="memoryForm"><input id="memoryText" maxlength="2000" placeholder="Ajouter un souvenir…" required><button class="send">Enregistrer</button></form><div id="memoryList"></div></div></section>
-<section id="aboutPanel" class="panel"><div class="panel-card"><h2>À propos de cette version</h2><p>LoganAI est en cours de migration vers une architecture sans serveur. GitHub Pages héberge les fichiers de l'application ; le navigateur exécutera le modèle sur l'appareil de l'utilisateur.</p><p><b>État actuel :</b> interface statique et mémoire locale préparées. Le moteur ONNX/WebAssembly et ses poids doivent encore être intégrés et testés.</p><p>La version serveur existante n'est pas modifiée par cette branche de migration.</p></div></section>
-</main>
-</div>
-<script src="./app.js"></script>
-</body></html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090d16"><title>LoganAI</title><link rel="stylesheet" href="./style.css"></head>
+<body><div class="app"><aside class="sidebar"><div class="brand"><div class="mark">L</div><div><b>LoganAI</b><small>Assistant expérimental</small></div></div>
+<button id="newChat" class="secondary full">＋ Nouvelle conversation</button><div class="side-label">ESPACE</div>
+<button class="nav active" data-panel="chat">◈ Discussion</button><button class="nav" data-panel="memory">▤ Mémoire</button><button class="nav" data-panel="about">ⓘ À propos</button>
+<div class="side-bottom"><span class="dot"></span><span id="status">Chargement…</span></div></aside>
+<main class="main"><header><div><span class="eyebrow">LOGANAI / GITHUB PAGES</span><h1 id="heading">Discussion</h1></div><span class="pill" id="modelState">Chargement du modèle…</span></header>
+<section id="chatPanel" class="panel visible"><div id="messages" class="messages"><div class="welcome"><div class="orb">L</div><h2>Bonjour, je suis LoganAI.</h2><p>Mon petit modèle neuronal s'exécute dans votre navigateur.</p><div class="notice">Modèle expérimental : les réponses peuvent être incohérentes. Le corpus initial est limité.</div></div></div>
+<form id="chatForm" class="composer"><textarea id="prompt" rows="1" maxlength="4000" placeholder="Chargement du modèle…" disabled required></textarea><div class="composer-bottom"><span id="composerNote">Chargement du moteur ONNX…</span><button class="send" type="submit" disabled>Envoyer ↑</button></div></form></section>
+<section id="memoryPanel" class="panel"><div class="panel-card"><h2>Mémoire locale</h2><p>Les éléments ajoutés ici restent dans ce navigateur et ne sont pas synchronisés entre appareils.</p><form id="memoryForm"><input id="memoryText" maxlength="2000" placeholder="Ajouter un souvenir…" required><button class="send">Enregistrer</button></form><div id="memoryList"></div></div></section>
+<section id="aboutPanel" class="panel"><div class="panel-card"><h2>À propos</h2><p>GitHub Pages héberge l'interface et le modèle. L'inférence est réalisée localement sur votre appareil avec ONNX Runtime Web et WebAssembly.</p><p>Ce prototype utilise un petit Transformer entraîné sur un corpus pédagogique restreint. Il ne possède pas les capacités d'un assistant généraliste.</p></div></section>
+</main></div>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/ort.min.js"></script><script src="./app.js"></script></body></html>
