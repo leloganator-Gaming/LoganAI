@@ -3,7 +3,9 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 data/*.sqlite3
-checkpoints/
+checkpoints/*
+!checkpoints/
+!checkpoints/loganai.pt
 dist/
 build/
 node_modules/
