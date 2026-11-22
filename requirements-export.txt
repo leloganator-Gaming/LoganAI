@@ -1,1 +1,4 @@
-torch==2.2.2\nonnx==1.16.1\nnumpy<2\n
+torch==2.2.2
+onnx==1.16.1
+onnxruntime==1.18.1
+numpy<2
