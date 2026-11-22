@@ -1,0 +1,1 @@
+torch==2.2.2\nonnx==1.16.1\nnumpy<2\n
