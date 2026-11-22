@@ -56,7 +56,7 @@ $("#memoryForm").addEventListener("submit", (event) => {
 });
 
 function normalizeWords(text) {
-  const ignored = new Set(["alors", "avec", "avoir", "cela", "comme", "dans", "des", "donc", "elle", "elles", "est", "etre", "fait", "faire", "ici", "leur", "leurs", "mais", "meme", "mon", "nous", "par", "pas", "peut", "pour", "quoi", "que", "quel", "quelle", "quelles", "quels", "qui", "sans", "ses", "son", "sur", "tes", "toi", "ton", "tous", "tout", "tres", "une", "uns", "vous"]);
+  const ignored = new Set(["alors", "avec", "avoir", "cela", "comme", "dans", "des", "donc", "elle", "elles", "est", "etre", "fait", "faire", "ici", "leur", "leurs", "mais", "meme", "mon", "nous", "par", "pas", "peut", "pour", "quoi", "que", "quel", "quelle", "quelles", "quels", "sans", "ses", "son", "sur", "tes", "toi", "ton", "tous", "tout", "tres", "une", "uns", "vous"]);
   return text.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, " ").trim().split(/\s+/)
     .filter((word) => word.length > 2 && !ignored.has(word));
