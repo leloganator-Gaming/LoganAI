@@ -8,6 +8,7 @@ on:
       - "data/train_corpus.txt"
       - "export_onnx.py"
       - "requirements-export.txt"
+      - "GITHUB_PAGES_MIGRATION.md"
       - ".github/workflows/pages.yml"
   push:
     branches: [main]
