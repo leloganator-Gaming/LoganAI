@@ -1,6 +1,6 @@
 # Guide de démarrage LoganAI
 
-## 1. Installer le moteur texte
+## 1. Installer le moteur texte sous Windows
 
 Installez Python 3.11 ou plus récent. Dans le dossier du dépôt :
 
@@ -11,58 +11,65 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Sur Windows, si PowerShell bloque l'activation, ouvrez une invite de commandes et utilisez `.venv\Scripts\activate.bat`.
+Si PowerShell bloque l'activation, utilisez l'invite de commandes et lancez `.venv\Scripts\activate.bat`.
 
-## 2. Entraîner le modèle texte
+## 2. Créer les premiers poids de LoganAI
+
+Le corpus original de départ se trouve dans `data/train_corpus.txt`. Il contient des dialogues français de démonstration et reste trop petit pour produire un assistant généraliste.
+
+Commencez par un essai court :
 
 ```powershell
-python -m loganai.training --steps 1000
+python -m loganai.training --steps 200 --batch-size 4
 ```
 
-Le corpus `data/demo_corpus.txt` est volontairement minuscule. Il valide le pipeline mais n'apprend pas les connaissances nécessaires à un assistant généraliste. Remplacez-le ou enrichissez-le avec des textes dont vous détenez les droits. Les poids sont créés localement dans `checkpoints/loganai.pt`.
+Puis poursuivez l'apprentissage en reprenant les poids et l'état de l'optimiseur :
 
-## 3. Démarrer l'interface Web
+```powershell
+python -m loganai.training --steps 2000 --batch-size 4 --resume
+```
+
+Les pertes d'entraînement et de validation s'affichent dans le terminal. Une perte qui baisse indique que le modèle s'adapte au corpus ; cela ne prouve pas qu'il sait répondre correctement à des questions générales.
+
+Les poids sont enregistrés dans `checkpoints/loganai.pt`. L'état permettant de reprendre l'entraînement est dans `checkpoints/loganai_training_state.pt`.
+
+Pour enrichir le corpus, ajoutez des dialogues originaux au format :
+
+```text
+Utilisateur : Votre question
+LoganAI : Une réponse exacte, claire et vérifiée.
+```
+
+Utilisez des textes originaux, autorisés ou du domaine public. N'ajoutez aucun mot de passe, donnée privée ou conversation personnelle sans autorisation. La qualité et la diversité des exemples sont plus importantes que leur quantité brute.
+
+## 3. Charger le modèle sur le site Render
+
+Le serveur Render ne reçoit pas automatiquement les fichiers créés sur votre ordinateur. Le checkpoint doit donc être transféré sur le serveur après l'entraînement. Le moyen le plus simple pour ce prototype est d'ajouter `checkpoints/loganai.pt` au dépôt GitHub, puis de laisser Render redéployer. Ne publiez pas `loganai_training_state.pt`, qui n'est pas nécessaire au fonctionnement du site.
+
+Attention : un checkpoint créé avec une configuration différente peut être incompatible. Après toute modification de l'architecture ou de `loganai/config.py`, il faut réentraîner le modèle.
+
+## 4. Démarrer l'interface Web en local
 
 ```powershell
 uvicorn loganai.api:app --host 127.0.0.1 --port 8000
 ```
 
-Ouvrez http://127.0.0.1:8000. L'historique et les souvenirs sont enregistrés dans `data/loganai.sqlite3`. La mémoire n'est intégrée au prompt que si vous l'ajoutez volontairement dans l'onglet Mémoire.
+Ouvrez http://127.0.0.1:8000. L'historique et les souvenirs sont enregistrés dans `data/loganai.sqlite3`. La mémoire est distincte des poids neuronaux.
 
-## 4. Entraîner Vision
+## 5. Entraîner Vision
 
-Créez le dossier `data/images/` et placez-y un ensemble d'images dont vous détenez les droits. Puis :
+Le modèle Vision actuel est expérimental : il apprend uniquement le débruitage d'images 64x64 non conditionnel. Il ne comprend pas les descriptions et ne fait pas de génération texte-vers-image.
 
-```powershell
-python -m loganai.vision_training --steps 2000 --batch-size 8
-```
+## 6. Application Windows
 
-Le modèle actuel apprend uniquement un débruitage d'images 64x64 non conditionnel. Il ne comprend pas les descriptions et ne fait pas encore de génération texte-vers-image. Cette étape nécessite un dataset d'images suffisant, une carte graphique et des essais. Le checkpoint est enregistré dans `checkpoints/loganai_vision.pt`.
+Le wrapper Tauri se connecte au serveur Python. Il ne contient pas encore automatiquement Python, les dépendances et les poids.
 
-## 5. Application Windows
+## État actuel des capacités
 
-Installez Node.js, Rust et les prérequis Tauri 2 pour Windows. Lancez le serveur Python dans un terminal, puis dans un second terminal :
-
-```powershell
-cd desktop
-npm install
-npm run dev
-```
-
-Pour créer un paquet Windows :
-
-```powershell
-npm run build
-```
-
-Le wrapper Desktop se connecte au serveur local. Ce premier paquet n'embarque pas encore automatiquement Python, les dépendances ni les poids : le moteur doit être installé et démarré séparément.
-
-## État des capacités
-
-- Conversation : petit Transformer causal entraînable, pas un assistant compétent à ce stade.
+- Texte : petit Transformer causal entraînable depuis une initialisation aléatoire.
 - Tokenizer : UTF-8 byte-level, réversible.
-- Mémoire : stockage local contrôlé.
-- Web : interface locale.
-- Vision : entraînement de débruiteur et génération expérimentale non conditionnelle ; pas encore de compréhension sémantique.
-- Voix : synthèse/reconnaissance du navigateur, selon sa prise en charge.
-- Desktop : wrapper Tauri nécessitant le serveur local.
+- Corpus : premiers dialogues originaux en français, à enrichir et vérifier.
+- Mémoire : stockage distinct des poids du modèle.
+- Vision : débruiteur expérimental non conditionnel.
+- Voix : fonctions vocales du navigateur.
+- Desktop : wrapper Tauri nécessitant le moteur Python.
