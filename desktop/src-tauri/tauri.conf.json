@@ -6,7 +6,7 @@
   "build": {"beforeBuildCommand": "", "beforeDevCommand": "", "frontendDist": "../"},
   "app": {
     "windows": [{"title": "LoganAI", "width": 1100, "height": 760, "minWidth": 720, "minHeight": 560}],
-    "security": {"csp": "default-src 'self' http://127.0.0.1:8000; connect-src 'self' http://127.0.0.1:8000; img-src 'self' asset: data: blob:"}
+    "security": {"csp": "default-src 'self' http://127.0.0.1:8000; connect-src 'self' http://127.0.0.1:8000; img-src 'self' asset: data: blob:; frame-src http://127.0.0.1:8000"}
   },
   "bundle": {"active": true, "targets": ["msi", "nsis"]}
 }
