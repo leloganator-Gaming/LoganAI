@@ -2,7 +2,6 @@
 from pathlib import Path
 import torch
 from torch import nn
-from loganai.config import CONFIG
 from loganai.model import LoganLanguageModel
 
 CHECKPOINT = Path("checkpoints/loganai.pt")
@@ -31,7 +30,7 @@ def main():
         input_names=["input_ids"], output_names=["logits"],
         dynamic_axes={"input_ids": {0: "batch", 1: "sequence"},
                       "logits": {0: "batch", 1: "sequence"}},
-        opset_version=17, do_constant_folding=True, dynamo=False,
+        opset_version=17, do_constant_folding=True,
     )
     print(f"Modèle ONNX exporté : {OUTPUT} ({OUTPUT.stat().st_size:,} octets)")
 
