@@ -37,7 +37,7 @@ def test_tokenizer_is_byte_level_and_handles_invalid_utf8():
 
 
 def test_tokenizer_clamps_out_of_range_tokens_on_decode():
-    assert LoganTokenizer().decode([-10, 256, 65]) == "\\x00�A"
+    assert LoganTokenizer().decode([-10, 256, 65]) == "\x00�A"
 
 
 def test_model_returns_expected_logits_and_loss():
