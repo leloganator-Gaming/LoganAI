@@ -39,3 +39,21 @@ def test_browser_memory_and_chat_history_are_local_and_bounded():
 def test_mobile_layout_has_responsive_rules():
     css = (DOCS / "style.css").read_text(encoding="utf-8")
     assert "@media" in css
+
+
+def test_french_corpus_is_expanded_and_published_for_retrieval():
+    corpus = (ROOT / "data" / "train_corpus.txt").read_text(encoding="utf-8")
+    questions = [line for line in corpus.splitlines() if line.startswith("Utilisateur :")]
+    assert len(questions) >= 200
+    assert "Bonjour" in corpus
+    workflow = (ROOT / ".github" / "workflows" / "pages.yml").read_text(encoding="utf-8")
+    assert "cp data/train_corpus.txt docs/knowledge.txt" in workflow
+    assert "--steps 800" in workflow
+
+
+def test_browser_prefers_known_french_answers_before_neural_generation():
+    app = (DOCS / "app.js").read_text(encoding="utf-8")
+    assert 'fetch("./knowledge.txt"' in app
+    assert "function findKnowledgeAnswer(message)" in app
+    assert "knownAnswer || await generateReply(message)" in app
+    assert "temperature = 0.68, topK = 24" in app
