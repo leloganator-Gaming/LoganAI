@@ -57,3 +57,11 @@ def test_browser_prefers_known_french_answers_before_neural_generation():
     assert "function findKnowledgeAnswer(message)" in app
     assert "knownAnswer || await generateReply(message)" in app
     assert "temperature = 0.68, topK = 24" in app
+
+
+def test_browser_rejects_unreadable_neural_output_with_french_fallback():
+    app = (DOCS / "app.js").read_text(encoding="utf-8")
+    assert "function isReadableFrench(text)" in app
+    assert "return isReadableFrench(answer) ? answer : unknownAnswer();" in app
+    assert "function unknownAnswer()" in app
+    assert "Je n'ai pas encore appris à répondre correctement" in app
