@@ -55,11 +55,33 @@ $("#memoryForm").addEventListener("submit", (event) => {
   $("#memoryText").value = ""; renderMemories();
 });
 
+const STOP_WORDS = new Set([
+  "alors","avec","avoir","cela","comme","dans","depuis","des","donc","elle","elles","est","etre","fait","faire","ici","leur","leurs","mais","meme","mon","nous","par","pas","peut","pour","quoi","que","quel","quelle","quelles","quels","sans","ses","son","sur","tes","toi","ton","tous","tout","tres","une","uns","vous",
+  "les","des","aux","du","de","la","le","un","et","ou","en","a","au","ce","ces","cet","cette","qui","dont","dont","je","tu","il","ils","on","me","te","se","ma","ta","sa","mes","tes","nos","vos","y","ne","ni","plus","moins","bien","comment","pourquoi","quand","combien","estce"
+]);
 function normalizeWords(text) {
-  const ignored = new Set(["alors", "avec", "avoir", "cela", "comme", "dans", "des", "donc", "elle", "elles", "est", "etre", "fait", "faire", "ici", "leur", "leurs", "mais", "meme", "mon", "nous", "par", "pas", "peut", "pour", "quoi", "que", "quel", "quelle", "quelles", "quels", "sans", "ses", "son", "sur", "tes", "toi", "ton", "tous", "tout", "tres", "une", "uns", "vous"]);
   return text.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, " ").trim().split(/\s+/)
-    .filter((word) => word.length > 2 && !ignored.has(word));
+    .filter((word) => word.length > 2 && !STOP_WORDS.has(word));
+}
+function conversationalAnswer(message) {
+  const value = message.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  if (/^(salut|bonjour|bonsoir|coucou|hello|hey)(\b|[!. ,])/i.test(value)) {
+    return "Bonjour ! Que souhaitez-vous savoir ou faire aujourd'hui ?";
+  }
+  if (/^(merci|merci beaucoup|je te remercie|je vous remercie)(\b|[!. ,])/i.test(value)) {
+    return "Je vous en prie. Avez-vous une autre question ?";
+  }
+  if (/^(au revoir|a bientot|bonne journee|bonne soiree|a plus)(\b|[!. ,])/i.test(value)) {
+    return "Au revoir ! Passez une bonne journée.";
+  }
+  if (/^(comment ca va|ca va|tu vas bien|vous allez bien)\??[!. ]*$/i.test(value)) {
+    return "Je fonctionne correctement, merci. Et vous, que puis-je faire pour vous ?";
+  }
+  if (/^(qui es tu|tu es qui|presente toi)\??[!. ]*$/i.test(value)) {
+    return "Je suis LoganAI, un assistant expérimental développé autour d'un petit modèle neuronal et d'une base de connaissances française.";
+  }
+  return null;
 }
 async function loadKnowledge() {
   const response = await fetch("./knowledge.txt", {cache: "no-cache"});
@@ -68,8 +90,8 @@ async function loadKnowledge() {
   let question = null;
   knowledgePairs = [];
   for (const line of lines) {
-    const q = line.match(/^Utilisateur\s*:\s*(.+)$/i);
-    const a = line.match(/^LoganAI\s*:\s*(.+)$/i);
+    const q = line.match(/^Utilisateur\\s*:\\s*(.+)$/i);
+    const a = line.match(/^LoganAI\\s*:\\s*(.+)$/i);
     if (q) question = q[1].trim();
     else if (a && question) {
       knowledgePairs.push({question, answer: a[1].trim(), words: normalizeWords(question)});
@@ -78,19 +100,43 @@ async function loadKnowledge() {
   }
 }
 function findKnowledgeAnswer(message) {
-  const query = new Set(normalizeWords(message));
-  if (!query.size) return null;
+  const conversational = conversationalAnswer(message);
+  if (conversational) return conversational;
+  const queryWords = normalizeWords(message);
+  if (!queryWords.length) return null;
+  const query = new Set(queryWords);
+  const documentFrequency = new Map();
+  for (const item of knowledgePairs) {
+    for (const word of new Set(item.words)) {
+      documentFrequency.set(word, (documentFrequency.get(word) || 0) + 1);
+    }
+  }
   let best = null;
   let bestScore = 0;
+  let secondScore = 0;
   for (const item of knowledgePairs) {
     const words = new Set(item.words);
     if (!words.size) continue;
-    let overlap = 0;
-    for (const word of query) if (words.has(word)) overlap++;
-    const score = overlap / Math.sqrt(query.size * words.size);
-    if (score > bestScore) { best = item; bestScore = score; }
+    let matchedWeight = 0;
+    let totalWeight = 0;
+    for (const word of query) {
+      const weight = 1 + Math.log(1 + knowledgePairs.length / (1 + (documentFrequency.get(word) || 0)));
+      totalWeight += weight;
+      if (words.has(word)) matchedWeight += weight;
+    }
+    const coverage = totalWeight ? matchedWeight / totalWeight : 0;
+    const precision = [...words].filter((word) => query.has(word)).length / Math.max(1, words.size);
+    const score = coverage * 0.82 + precision * 0.18;
+    if (score > bestScore) {
+      secondScore = bestScore;
+      bestScore = score;
+      best = item;
+    } else if (score > secondScore) {
+      secondScore = score;
+    }
   }
-  return bestScore >= 0.68 ? best.answer : null;
+  if (bestScore < 0.72 || (bestScore - secondScore < 0.035 && bestScore < 0.94)) return null;
+  return best.answer;
 }
 
 function bytesToIds(text) { return Array.from(encoder.encode(text)); }
@@ -150,7 +196,7 @@ async function loadModel() {
     session = await ort.InferenceSession.create("./model.onnx", {executionProviders: ["wasm"]});
     $("#prompt").disabled = false; $("#prompt").placeholder = "Écrivez un message à LoganAI…";
     $("#chatForm button").disabled = false; $("#composerNote").textContent = knowledgePairs.length
-      ? "Réponses vérifiées sur les questions connues ; modèle neuronal pour les autres demandes."
+      ? "Base de connaissances française chargée."
       : "Modèle exécuté sur cet appareil.";
     status.textContent = "Modèle navigateur chargé"; modelState.textContent = "ONNX / WASM prêt";
   } catch (error) {
@@ -166,7 +212,7 @@ $("#chatForm").addEventListener("submit", async (event) => {
   const button = $("#chatForm button"); button.disabled = true; button.textContent = "Réflexion…";
   try {
     const knownAnswer = findKnowledgeAnswer(message);
-    addBubble("assistant", knownAnswer || await generateReply(message));
+    addBubble("assistant", knownAnswer || unknownAnswer());
   }
   catch (error) { addBubble("assistant", "Erreur du moteur : " + error.message); }
   finally { button.disabled = false; button.textContent = "Envoyer ↑"; input.focus(); }
