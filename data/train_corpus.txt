@@ -10415,3 +10415,356 @@ LoganAI : Une saison compétitive est une période durant laquelle les performan
 
 Utilisateur : Que signifie le mot « replay » ?
 LoganAI : Un replay permet de revoir le déroulement d'une partie à partir d'un enregistrement ou d'une reconstitution.
+
+# Extension originale : vocabulaire, sciences, raisonnement et numérique
+
+Utilisateur : Que signifie le terme « abstraction » ?
+LoganAI : L'abstraction consiste à retenir les caractéristiques essentielles d'un sujet et à laisser de côté les détails secondaires.
+
+Utilisateur : Que signifie le terme « algorithme » ?
+LoganAI : Un algorithme est une suite finie d'instructions précises permettant de résoudre un problème ou d'effectuer une tâche.
+
+Utilisateur : Que signifie le terme « analogie » ?
+LoganAI : Une analogie rapproche deux situations qui partagent certains points communs afin de rendre une idée plus facile à comprendre.
+
+Utilisateur : Que signifie le terme « argument » ?
+LoganAI : Un argument est une raison ou une preuve avancée pour soutenir une affirmation.
+
+Utilisateur : Que signifie le terme « biais » ?
+LoganAI : Un biais est une tendance qui influence un jugement et peut éloigner une conclusion d'une évaluation équilibrée.
+
+Utilisateur : Que signifie le terme « cause » ?
+LoganAI : Une cause est un fait ou un mécanisme qui contribue à produire un événement ou un résultat.
+
+Utilisateur : Que signifie le terme « conséquence » ?
+LoganAI : Une conséquence est un résultat qui découle d'une action, d'une décision ou d'un événement.
+
+Utilisateur : Que signifie le terme « contexte » ?
+LoganAI : Le contexte regroupe les circonstances et les informations qui permettent d'interpréter correctement une situation.
+
+Utilisateur : Que signifie le terme « déduction » ?
+LoganAI : La déduction consiste à tirer une conclusion à partir de prémisses ou de règles déjà admises.
+
+Utilisateur : Que signifie le terme « hypothèse » ?
+LoganAI : Une hypothèse est une proposition provisoire que l'on formule pour expliquer un phénomène et que l'on peut examiner.
+
+Utilisateur : Que signifie le terme « inférence » ?
+LoganAI : Une inférence est une conclusion obtenue à partir d'indices, de faits ou de connaissances disponibles.
+
+Utilisateur : Que signifie le terme « nuance » ?
+LoganAI : Une nuance est une différence subtile qui précise le sens ou la portée d'une idée.
+
+Utilisateur : Que signifie le terme « prémisse » ?
+LoganAI : Une prémisse est une proposition de départ utilisée dans un raisonnement pour construire une conclusion.
+
+Utilisateur : Que signifie le terme « preuve » ?
+LoganAI : Une preuve est un élément vérifiable qui soutient ou réfute une affirmation.
+
+Utilisateur : Que signifie le terme « raisonnement » ?
+LoganAI : Un raisonnement est une suite organisée d'idées qui relie des informations à une conclusion.
+
+Utilisateur : Que signifie le terme « synthèse » ?
+LoganAI : Une synthèse rassemble les idées essentielles de plusieurs informations en un ensemble cohérent.
+
+Utilisateur : Que signifie le terme « thèse » ?
+LoganAI : Une thèse est une idée principale que l'on cherche à défendre à l'aide d'arguments.
+
+Utilisateur : Que signifie le terme « ambiguïté » ?
+LoganAI : Une ambiguïté apparaît lorsqu'un mot ou un énoncé peut recevoir plusieurs interprétations.
+
+Utilisateur : Que signifie le terme « antonyme » ?
+LoganAI : Un antonyme est un mot dont le sens est opposé à celui d'un autre mot.
+
+Utilisateur : Que signifie le terme « synonyme » ?
+LoganAI : Un synonyme est un mot qui possède un sens identique ou proche d'un autre mot selon le contexte.
+
+Utilisateur : Que signifie le terme « homonyme » ?
+LoganAI : Un homonyme est un mot qui se prononce ou s'écrit comme un autre tout en ayant un sens différent.
+
+Utilisateur : Que signifie le terme « métaphore » ?
+LoganAI : Une métaphore décrit une idée en la rapprochant directement d'une autre sans outil de comparaison explicite.
+
+Utilisateur : Que signifie le terme « personnification » ?
+LoganAI : La personnification attribue des caractéristiques humaines à un objet, un animal ou une idée.
+
+Utilisateur : Que signifie le terme « registre de langue » ?
+LoganAI : Un registre de langue correspond au niveau de langage choisi selon la situation : familier, courant ou soutenu.
+
+Utilisateur : Que signifie le terme « conjugaison » ?
+LoganAI : La conjugaison est l'ensemble des formes que prend un verbe selon la personne, le temps, le mode et parfois l'aspect.
+
+Utilisateur : Que signifie le terme « adverbe » ?
+LoganAI : Un adverbe est un mot invariable qui précise notamment le sens d'un verbe, d'un adjectif ou d'un autre adverbe.
+
+Utilisateur : Que signifie le terme « adjectif » ?
+LoganAI : Un adjectif est un mot qui apporte une caractéristique ou une précision à un nom.
+
+Utilisateur : Que signifie le terme « complément d'objet direct » ?
+LoganAI : Le complément d'objet direct complète le verbe sans être introduit par une préposition.
+
+Utilisateur : Que signifie le terme « proposition subordonnée » ?
+LoganAI : Une proposition subordonnée dépend d'une autre proposition et remplit une fonction dans la phrase.
+
+Utilisateur : Que signifie le terme « ponctuation » ?
+LoganAI : La ponctuation organise un texte, marque les pauses et aide à comprendre les relations entre les phrases.
+
+Utilisateur : Que signifie le terme « atome » ?
+LoganAI : Un atome est une unité de matière constituée d'un noyau entouré d'électrons.
+
+Utilisateur : Que signifie le terme « molécule » ?
+LoganAI : Une molécule est un assemblage d'au moins deux atomes liés entre eux.
+
+Utilisateur : Que signifie le terme « cellule » ?
+LoganAI : La cellule est l'unité de base structurelle et fonctionnelle des êtres vivants.
+
+Utilisateur : Que signifie le terme « ADN » ?
+LoganAI : L'ADN est une molécule qui porte une grande partie de l'information génétique des organismes vivants.
+
+Utilisateur : Que signifie le terme « gène » ?
+LoganAI : Un gène est une portion d'ADN qui contribue à déterminer un caractère ou à produire un ARN fonctionnel.
+
+Utilisateur : Que signifie le terme « écosystème » ?
+LoganAI : Un écosystème associe un milieu, les êtres vivants qui l'habitent et les interactions entre eux.
+
+Utilisateur : Que signifie le terme « biodiversité » ?
+LoganAI : La biodiversité désigne la variété des êtres vivants, de leurs gènes et des écosystèmes.
+
+Utilisateur : Que signifie le terme « photosynthèse » ?
+LoganAI : La photosynthèse est le processus par lequel certaines cellules utilisent l'énergie lumineuse pour fabriquer de la matière organique à partir notamment d'eau et de dioxyde de carbone.
+
+Utilisateur : Que signifie le terme « gravité » ?
+LoganAI : La gravité est l'interaction qui attire les corps ayant une masse les uns vers les autres.
+
+Utilisateur : Que signifie le terme « énergie cinétique » ?
+LoganAI : L'énergie cinétique est l'énergie qu'un objet possède en raison de son mouvement.
+
+Utilisateur : Que signifie le terme « énergie potentielle » ?
+LoganAI : L'énergie potentielle est une énergie liée à la position ou à la configuration d'un système.
+
+Utilisateur : Que signifie le terme « évaporation » ?
+LoganAI : L'évaporation est le passage progressif d'un liquide à l'état gazeux depuis sa surface.
+
+Utilisateur : Que signifie le terme « condensation » ?
+LoganAI : La condensation est le passage d'une substance de l'état gazeux à l'état liquide.
+
+Utilisateur : Que signifie le terme « pression atmosphérique » ?
+LoganAI : La pression atmosphérique est la force exercée par l'air sur une surface, rapportée à cette surface.
+
+Utilisateur : Que signifie le terme « climat » ?
+LoganAI : Le climat décrit les conditions météorologiques moyennes d'une région observées sur une longue période.
+
+Utilisateur : Que signifie le terme « météo » ?
+LoganAI : La météorologie étudie l'état de l'atmosphère et permet de prévoir le temps à court terme.
+
+Utilisateur : Que signifie le terme « tectonique des plaques » ?
+LoganAI : La tectonique des plaques décrit le déplacement des grandes plaques rigides qui composent la surface externe de la Terre.
+
+Utilisateur : Que signifie le terme « érosion » ?
+LoganAI : L'érosion est l'usure et le transport des roches ou des sols sous l'action de l'eau, du vent, de la glace ou d'autres agents.
+
+Utilisateur : Que signifie le terme « latitude » ?
+LoganAI : La latitude mesure la position d'un point au nord ou au sud de l'équateur.
+
+Utilisateur : Que signifie le terme « longitude » ?
+LoganAI : La longitude mesure la position d'un point à l'est ou à l'ouest du méridien de référence.
+
+Utilisateur : Que signifie le terme « démocratie » ?
+LoganAI : La démocratie est un système politique dans lequel le pouvoir est exercé directement ou indirectement par les citoyens.
+
+Utilisateur : Que signifie le terme « constitution » ?
+LoganAI : Une constitution est le texte fondamental qui organise les institutions d'un État et fixe les règles essentielles du pouvoir.
+
+Utilisateur : Que signifie le terme « citoyenneté » ?
+LoganAI : La citoyenneté désigne l'appartenance à une communauté politique et les droits et devoirs qui y sont associés.
+
+Utilisateur : Que signifie le terme « Révolution française » ?
+LoganAI : La Révolution française commence en 1789 et transforme profondément les institutions politiques et la société en France.
+
+Utilisateur : Que signifie le terme « Renaissance » ?
+LoganAI : La Renaissance est une période de renouveau artistique, scientifique et intellectuel en Europe, située principalement entre le XVe et le XVIe siècle.
+
+Utilisateur : Que signifie le terme « industrialisation » ?
+LoganAI : L'industrialisation est le développement de la production mécanisée et des activités industrielles dans une société.
+
+Utilisateur : Que signifie le terme « source historique » ?
+LoganAI : Une source historique est un document, un objet ou un témoignage utilisé pour étudier le passé.
+
+Utilisateur : Que signifie le terme « monnaie » ?
+LoganAI : La monnaie est un moyen d'échange accepté qui sert aussi d'unité de compte et de réserve de valeur.
+
+Utilisateur : Que signifie le terme « inflation » ?
+LoganAI : L'inflation est une hausse générale et durable des prix qui réduit le pouvoir d'achat d'une même somme d'argent.
+
+Utilisateur : Que signifie le terme « offre » ?
+LoganAI : En économie, l'offre représente la quantité de biens ou de services que les vendeurs souhaitent proposer à différents prix.
+
+Utilisateur : Que signifie le terme « demande » ?
+LoganAI : En économie, la demande représente la quantité de biens ou de services que les acheteurs souhaitent acquérir à différents prix.
+
+Utilisateur : Que signifie le terme « budget » ?
+LoganAI : Un budget est une prévision des recettes et des dépenses sur une période donnée.
+
+Utilisateur : Que signifie le terme « pourcentage » ?
+LoganAI : Un pourcentage exprime une proportion sur une base de cent.
+
+Utilisateur : Que signifie le terme « moyenne » ?
+LoganAI : La moyenne arithmétique s'obtient en additionnant les valeurs puis en divisant la somme par leur nombre.
+
+Utilisateur : Que signifie le terme « médiane » ?
+LoganAI : La médiane est la valeur qui partage une série ordonnée en deux groupes de même effectif, ou presque.
+
+Utilisateur : Que signifie le terme « probabilité » ?
+LoganAI : Une probabilité mesure la possibilité qu'un événement se produise, avec une valeur comprise entre zéro et un.
+
+Utilisateur : Que signifie le terme « fraction » ?
+LoganAI : Une fraction représente une ou plusieurs parts d'un tout et s'écrit comme un quotient de deux nombres entiers, avec un dénominateur non nul.
+
+Utilisateur : Que signifie le terme « nombre premier » ?
+LoganAI : Un nombre premier est un entier supérieur à un qui possède exactement deux diviseurs positifs : un et lui-même.
+
+Utilisateur : Que signifie le terme « périmètre » ?
+LoganAI : Le périmètre est la longueur totale du contour d'une figure plane.
+
+Utilisateur : Que signifie le terme « aire » ?
+LoganAI : L'aire mesure la surface occupée par une figure plane.
+
+Utilisateur : Que signifie le terme « volume » ?
+LoganAI : Le volume mesure l'espace occupé par un objet ou contenu dans un solide.
+
+Utilisateur : Que signifie le terme « équation » ?
+LoganAI : Une équation est une égalité mathématique qui contient une ou plusieurs inconnues.
+
+Utilisateur : Que signifie le terme « variable informatique » ?
+LoganAI : Une variable informatique est un nom qui permet de référencer une valeur utilisée par un programme.
+
+Utilisateur : Que signifie le terme « boucle » ?
+LoganAI : Une boucle est une structure de programmation qui répète des instructions tant qu'une condition est satisfaite ou pour un nombre déterminé de fois.
+
+Utilisateur : Que signifie le terme « condition » ?
+LoganAI : Une condition est une expression évaluée comme vraie ou fausse qui permet à un programme de choisir un chemin d'exécution.
+
+Utilisateur : Que signifie le terme « tableau informatique » ?
+LoganAI : Un tableau informatique est une structure qui regroupe plusieurs valeurs accessibles à l'aide d'indices.
+
+Utilisateur : Que signifie le terme « récursivité » ?
+LoganAI : La récursivité est une méthode dans laquelle une fonction ou une définition fait appel à elle-même, avec une condition d'arrêt.
+
+Utilisateur : Que signifie le terme « compilation » ?
+LoganAI : La compilation transforme un programme écrit dans un langage source en une forme exécutable ou intermédiaire.
+
+Utilisateur : Que signifie le terme « débogage » ?
+LoganAI : Le débogage consiste à rechercher, comprendre et corriger les erreurs d'un programme.
+
+Utilisateur : Que signifie le terme « navigateur web » ?
+LoganAI : Un navigateur web est un logiciel qui permet de consulter des pages et des applications sur Internet.
+
+Utilisateur : Que signifie le terme « serveur » ?
+LoganAI : Un serveur est un système informatique qui fournit des données ou des services à d'autres systèmes appelés clients.
+
+Utilisateur : Que signifie le terme « client » ?
+LoganAI : Dans une architecture réseau, un client est un programme ou appareil qui demande un service à un serveur.
+
+Utilisateur : Que signifie le terme « protocole » ?
+LoganAI : Un protocole informatique définit des règles communes pour échanger des données entre systèmes.
+
+Utilisateur : Que signifie le terme « HTTP » ?
+LoganAI : HTTP est un protocole utilisé pour échanger des ressources entre un client web et un serveur.
+
+Utilisateur : Que signifie le terme « HTTPS » ?
+LoganAI : HTTPS est la version sécurisée de HTTP, qui protège les échanges grâce au chiffrement TLS.
+
+Utilisateur : Que signifie le terme « base de données relationnelle » ?
+LoganAI : Une base de données relationnelle organise les informations dans des tables reliées entre elles par des clés.
+
+Utilisateur : Que signifie le terme « requête SQL » ?
+LoganAI : Une requête SQL est une instruction qui permet notamment de lire, ajouter, modifier ou supprimer des données dans une base relationnelle.
+
+Utilisateur : Que signifie le terme « interface utilisateur » ?
+LoganAI : Une interface utilisateur regroupe les éléments par lesquels une personne interagit avec un logiciel ou un appareil.
+
+Utilisateur : Que signifie le terme « accessibilité numérique » ?
+LoganAI : L'accessibilité numérique vise à rendre les sites et logiciels utilisables par le plus grand nombre, y compris les personnes en situation de handicap.
+
+Utilisateur : Que signifie le terme « intelligence artificielle » ?
+LoganAI : L'intelligence artificielle regroupe des méthodes permettant à des systèmes informatiques d'effectuer des tâches associées à certaines capacités humaines, comme reconnaître, prédire ou générer.
+
+Utilisateur : Que signifie le terme « apprentissage supervisé » ?
+LoganAI : L'apprentissage supervisé entraîne un modèle à partir d'exemples associés à des réponses ou étiquettes attendues.
+
+Utilisateur : Que signifie le terme « apprentissage non supervisé » ?
+LoganAI : L'apprentissage non supervisé cherche des structures ou regroupements dans des données sans étiquettes fournies pour chaque exemple.
+
+Utilisateur : Que signifie le terme « surapprentissage » ?
+LoganAI : Le surapprentissage survient lorsqu'un modèle s'adapte trop aux exemples d'entraînement et généralise mal à de nouvelles données.
+
+Utilisateur : Que signifie le terme « jeu de données » ?
+LoganAI : Un jeu de données est un ensemble organisé d'informations utilisé pour l'analyse, l'entraînement ou l'évaluation.
+
+Utilisateur : Que signifie le terme « modèle de langage » ?
+LoganAI : Un modèle de langage apprend des régularités dans des textes afin d'estimer ou de générer des séquences de mots ou de tokens.
+
+Utilisateur : Que signifie le terme « hallucination d'une IA » ?
+LoganAI : Une hallucination d'IA est une réponse générée qui semble crédible mais contient des informations inventées ou non vérifiées.
+
+Utilisateur : Que signifie le terme « chiffrement » ?
+LoganAI : Le chiffrement transforme des données lisibles en une forme protégée à l'aide d'un procédé cryptographique.
+
+Utilisateur : Que signifie le terme « authentification » ?
+LoganAI : L'authentification consiste à vérifier qu'une personne ou un système est bien celui qu'il prétend être.
+
+Utilisateur : Que signifie le terme « autorisation informatique » ?
+LoganAI : L'autorisation détermine les actions qu'un utilisateur ou un programme a le droit d'effectuer après son identification.
+
+Utilisateur : Que signifie le terme « hameçonnage » ?
+LoganAI : L'hameçonnage est une tentative de tromper une personne pour lui faire révéler des informations ou effectuer une action risquée.
+
+Utilisateur : Que signifie le terme « mise à jour logicielle » ?
+LoganAI : Une mise à jour logicielle apporte des corrections, des améliorations ou de nouvelles fonctions à un programme.
+
+Utilisateur : Que signifie le terme « empreinte numérique » ?
+LoganAI : Une empreinte numérique est une valeur calculée à partir de données, souvent utilisée pour vérifier leur intégrité.
+
+Utilisateur : Que signifie le terme « sauvegarde incrémentale » ?
+LoganAI : Une sauvegarde incrémentale copie les changements effectués depuis la dernière sauvegarde, complète ou incrémentale.
+
+Utilisateur : Que signifie le terme « développement durable » ?
+LoganAI : Le développement durable cherche à répondre aux besoins actuels tout en préservant la capacité des générations futures à répondre aux leurs.
+
+Utilisateur : Que signifie le terme « énergie renouvelable » ?
+LoganAI : Une énergie renouvelable provient d'une source qui se reconstitue naturellement à l'échelle humaine.
+
+Utilisateur : Que signifie le terme « recyclage » ?
+LoganAI : Le recyclage transforme des déchets en matières ou produits pouvant être réutilisés.
+
+Utilisateur : Que signifie le terme « empreinte carbone » ?
+LoganAI : L'empreinte carbone estime les émissions de gaz à effet de serre associées à une activité, un produit ou une organisation.
+
+Utilisateur : Que signifie le terme « ressource naturelle » ?
+LoganAI : Une ressource naturelle est un élément provenant de l'environnement et utilisé par les sociétés humaines.
+
+Utilisateur : Que signifie le terme « pollution » ?
+LoganAI : La pollution est l'introduction de substances ou d'énergies dans l'environnement à des niveaux pouvant provoquer des effets nuisibles.
+
+Utilisateur : Que signifie le terme « cycle de l'eau » ?
+LoganAI : Le cycle de l'eau décrit la circulation continue de l'eau entre océans, atmosphère, sols, cours d'eau et êtres vivants.
+
+Utilisateur : Que signifie le terme « communication » ?
+LoganAI : La communication est le processus par lequel des personnes ou systèmes échangent des informations.
+
+Utilisateur : Que signifie le terme « écoute active » ?
+LoganAI : L'écoute active consiste à prêter attention à un interlocuteur, vérifier sa compréhension et lui laisser la possibilité de préciser sa pensée.
+
+Utilisateur : Que signifie le terme « coopération » ?
+LoganAI : La coopération est une action menée par plusieurs personnes qui coordonnent leurs efforts vers un objectif commun.
+
+Utilisateur : Que signifie le terme « résolution de problème » ?
+LoganAI : La résolution de problème consiste à définir une difficulté, rechercher des solutions, les comparer et vérifier le résultat.
+
+Utilisateur : Que signifie le terme « priorité » ?
+LoganAI : Une priorité est une tâche ou un objectif qui doit être traité avant d'autres en raison de son importance ou de son urgence.
+
+Utilisateur : Que signifie le terme « objectif mesurable » ?
+LoganAI : Un objectif mesurable est formulé de manière à pouvoir constater clairement s'il a été atteint.
+
+Utilisateur : Que signifie le terme « métadonnée » ?
+LoganAI : Une métadonnée est une information qui décrit une autre donnée, par exemple sa date, son format ou son origine.
