@@ -668,3 +668,257 @@ Utilisateur : Que signifie être concis ?
 LoganAI : Être concis consiste à transmettre l'essentiel avec peu de mots, sans supprimer les informations indispensables.
 Utilisateur : Merci pour ton aide.
 LoganAI : Je vous en prie. N'hésitez pas à poser une autre question.
+Utilisateur : Comment dit-on bonjour de manière polie ?
+LoganAI : Vous pouvez dire « Bonjour », puis ajouter le nom de la personne si vous le connaissez. Dans un contexte formel, « Bonjour, comment allez-vous ? » convient aussi.
+Utilisateur : Comment remercier quelqu'un ?
+LoganAI : Vous pouvez dire « Merci beaucoup », « Je vous remercie » ou « C'est très gentil de votre part ». Choisissez la formule selon le contexte.
+Utilisateur : Comment demander de l'aide ?
+LoganAI : Vous pouvez dire « Pourriez-vous m'aider, s'il vous plaît ? » ou « J'aurais besoin d'un coup de main ». Expliquez ensuite ce dont vous avez besoin.
+Utilisateur : Comment présenter des excuses ?
+LoganAI : Vous pouvez dire « Je suis désolé » ou « Je vous prie de m'excuser ». Il est utile de reconnaître précisément ce qui s'est passé.
+Utilisateur : Comment demander de répéter ?
+LoganAI : Vous pouvez dire « Pourriez-vous répéter, s'il vous plaît ? » ou « Je n'ai pas bien compris ». Une demande polie permet de clarifier l'échange.
+Utilisateur : Comment terminer une conversation poliment ?
+LoganAI : Vous pouvez dire « Merci pour cet échange, bonne journée » ou « Au revoir et à bientôt ». La formule dépend de la situation.
+Utilisateur : Quelle est la différence entre « son » et « sont » ?
+LoganAI : « Son » est un déterminant possessif, comme dans « son livre ». « Sont » est une forme du verbe être ; on peut souvent le remplacer par « étaient ».
+Utilisateur : Quelle est la différence entre « on » et « ont » ?
+LoganAI : « On » est un pronom personnel. « Ont » est une forme du verbe avoir ; on peut le remplacer par « avaient ».
+Utilisateur : Quelle est la différence entre « ce » et « se » ?
+LoganAI : « Ce » est un déterminant ou un pronom démonstratif. « Se » est un pronom placé devant un verbe, comme dans « se laver ».
+Utilisateur : Quelle est la différence entre « ou » et « où » ?
+LoganAI : « Ou » indique un choix. « Où » sert à parler d'un lieu ou d'un moment. On peut parfois remplacer « ou » par « ou bien ».
+Utilisateur : Comment reconnaître le sujet d'une phrase ?
+LoganAI : Le sujet indique qui fait l'action ou de qui l'on parle. Pour le trouver, posez la question « Qui est-ce qui ? » ou « Qu'est-ce qui ? » devant le verbe.
+Utilisateur : Qu'est-ce qu'un complément d'objet direct ?
+LoganAI : Le complément d'objet direct complète le verbe sans préposition. On peut souvent le repérer en posant la question « qui ? » ou « quoi ? » après le verbe.
+Utilisateur : Qu'est-ce qu'un complément circonstanciel ?
+LoganAI : Un complément circonstanciel précise les circonstances d'une action, par exemple le lieu, le temps, la manière ou la cause.
+Utilisateur : Qu'est-ce qu'une phrase interrogative ?
+LoganAI : Une phrase interrogative sert à poser une question. Elle se termine généralement par un point d'interrogation.
+Utilisateur : Qu'est-ce qu'une phrase négative ?
+LoganAI : Une phrase négative exprime le contraire d'une affirmation. En français, elle utilise souvent « ne » et « pas », comme dans « Je ne sais pas ».
+Utilisateur : Qu'est-ce qu'un paragraphe ?
+LoganAI : Un paragraphe est un ensemble de phrases qui développent généralement une même idée. Il commence sur une nouvelle ligne.
+Utilisateur : Quand utiliser une virgule ?
+LoganAI : La virgule sépare des éléments dans une phrase et marque une courte pause. Elle ne doit généralement pas séparer le sujet de son verbe.
+Utilisateur : Quand utiliser un point-virgule ?
+LoganAI : Le point-virgule sépare deux propositions liées par le sens. Il marque une pause plus forte que la virgule et moins définitive que le point.
+Utilisateur : Qu'est-ce qu'un nombre pair ?
+LoganAI : Un nombre pair est un entier divisible par deux sans reste. Par exemple, 8, 14 et 100 sont des nombres pairs.
+Utilisateur : Qu'est-ce qu'un nombre impair ?
+LoganAI : Un nombre impair est un entier qui n'est pas divisible par deux sans reste. Par exemple, 3, 11 et 27 sont impairs.
+Utilisateur : Comment calculer une moyenne ?
+LoganAI : Additionnez toutes les valeurs, puis divisez la somme par le nombre de valeurs. Par exemple, la moyenne de 4, 6 et 8 est 6.
+Utilisateur : Combien font 25 pour cent de 200 ?
+LoganAI : 25 pour cent de 200 égale 50.
+Utilisateur : Qu'est-ce qu'une fraction ?
+LoganAI : Une fraction représente une ou plusieurs parts d'un tout. Elle comporte un numérateur au-dessus et un dénominateur en dessous.
+Utilisateur : Qu'est-ce qu'un angle droit ?
+LoganAI : Un angle droit mesure 90 degrés. Il apparaît notamment dans les coins d'un rectangle.
+Utilisateur : Qu'est-ce qu'un volcan ?
+LoganAI : Un volcan est une ouverture de la croûte terrestre par laquelle peuvent sortir de la lave, des gaz et des matériaux. Les volcans peuvent être actifs, endormis ou éteints.
+Utilisateur : Qu'est-ce qu'un séisme ?
+LoganAI : Un séisme est une vibration du sol provoquée par une libération soudaine d'énergie dans la Terre, souvent liée au déplacement de roches le long d'une faille.
+Utilisateur : Pourquoi pleut-il ?
+LoganAI : La pluie se forme lorsque la vapeur d'eau se condense en gouttelettes dans les nuages. Quand elles deviennent assez grosses, elles tombent vers le sol.
+Utilisateur : Qu'est-ce que le cycle de l'eau ?
+LoganAI : Le cycle de l'eau décrit les déplacements de l'eau entre les océans, l'atmosphère, les sols et les êtres vivants, notamment par évaporation, condensation et précipitation.
+Utilisateur : Qu'est-ce qu'un mammifère ?
+LoganAI : Un mammifère est un animal vertébré dont les femelles possèdent des glandes mammaires. La plupart ont des poils à un moment de leur vie.
+Utilisateur : Pourquoi les abeilles sont-elles importantes ?
+LoganAI : De nombreuses abeilles transportent le pollen entre les fleurs. Cette pollinisation aide les plantes à se reproduire et contribue à la biodiversité.
+Utilisateur : Qu'est-ce que la biodiversité ?
+LoganAI : La biodiversité désigne la variété des êtres vivants, de leurs gènes et des écosystèmes. Elle contribue à l'équilibre du vivant.
+Utilisateur : Qu'est-ce qu'une énergie renouvelable ?
+LoganAI : Une énergie renouvelable provient de sources qui se reconstituent naturellement à l'échelle humaine, comme le soleil, le vent et l'eau en mouvement.
+Utilisateur : Qu'est-ce que le recyclage ?
+LoganAI : Le recyclage transforme des déchets en matières ou en objets pouvant être utilisés à nouveau. Le tri facilite cette opération.
+Utilisateur : À quoi sert un navigateur Internet ?
+LoganAI : Un navigateur permet de consulter des pages web, d'ouvrir des liens et d'utiliser des applications en ligne. Exemples : Firefox, Chrome et Safari.
+Utilisateur : Qu'est-ce qu'une adresse IP ?
+LoganAI : Une adresse IP est un identifiant numérique utilisé pour acheminer des données vers un appareil sur un réseau utilisant le protocole Internet.
+Utilisateur : Qu'est-ce qu'un serveur informatique ?
+LoganAI : Un serveur est un ordinateur ou un programme qui fournit des ressources ou des services à d'autres appareils, appelés clients.
+Utilisateur : Qu'est-ce que le cloud ?
+LoganAI : Le cloud désigne des services informatiques accessibles à distance par Internet, comme le stockage de fichiers ou l'exécution d'applications sur des serveurs.
+Utilisateur : Qu'est-ce qu'une extension de fichier ?
+LoganAI : Une extension est la partie finale d'un nom de fichier, souvent précédée d'un point. Elle indique généralement le type de fichier, comme .txt ou .png.
+Utilisateur : Qu'est-ce qu'un fichier CSV ?
+LoganAI : Un fichier CSV est un fichier texte qui présente des données sous forme de lignes et de valeurs séparées par un délimiteur, souvent une virgule ou un point-virgule.
+Utilisateur : Qu'est-ce qu'une boucle infinie ?
+LoganAI : Une boucle infinie est une boucle qui ne s'arrête pas parce que sa condition de sortie n'est jamais atteinte. Elle peut bloquer un programme si elle n'est pas maîtrisée.
+Utilisateur : Qu'est-ce qu'une erreur de syntaxe ?
+LoganAI : Une erreur de syntaxe survient lorsque le code ne respecte pas les règles d'écriture du langage. L'interpréteur ou le compilateur ne peut alors pas l'analyser correctement.
+Utilisateur : Qu'est-ce qu'un commentaire dans le code ?
+LoganAI : Un commentaire est un texte destiné aux personnes qui lisent le programme. Il explique le code et n'est généralement pas exécuté.
+Utilisateur : Pourquoi documenter un programme ?
+LoganAI : La documentation explique comment installer, utiliser et maintenir un programme. Elle facilite la compréhension du projet par d'autres personnes et par son créateur.
+Utilisateur : Comment choisir un bon nom de variable ?
+LoganAI : Choisissez un nom court mais explicite, qui décrit le contenu ou le rôle de la variable. Évitez les abréviations difficiles à comprendre.
+Utilisateur : Qu'est-ce qu'une interface utilisateur ?
+LoganAI : Une interface utilisateur est l'ensemble des éléments qui permettent à une personne d'interagir avec un logiciel, comme les boutons, les menus et les champs de texte.
+Utilisateur : Qu'est-ce que l'accessibilité numérique ?
+LoganAI : L'accessibilité numérique vise à rendre les sites et les logiciels utilisables par le plus grand nombre, notamment les personnes en situation de handicap.
+Utilisateur : Qu'est-ce qu'un écran responsive ?
+LoganAI : Une interface responsive adapte sa disposition et ses dimensions à la taille de l'écran, afin de rester utilisable sur téléphone, tablette et ordinateur.
+Utilisateur : Pourquoi faut-il faire des pauses ?
+LoganAI : Les pauses permettent de reposer l'attention et de reprendre une activité avec davantage de concentration. Leur durée dépend de la tâche et de la personne.
+Utilisateur : Comment rester concentré pendant les devoirs ?
+LoganAI : Choisissez une tâche précise, éloignez les distractions et travaillez par périodes raisonnables. Prévoyez des pauses et demandez de l'aide si un point reste difficile.
+Utilisateur : Comment demander une explication plus simple ?
+LoganAI : Vous pouvez dire « Pouvez-vous expliquer avec des mots plus simples et un exemple ? ». Cela indique clairement le type d'aide attendu.
+Utilisateur : Que signifie « je ne sais pas » ?
+LoganAI : Cette expression indique que la personne ne possède pas l'information ou n'est pas certaine de la réponse. Reconnaître son incertitude est préférable à inventer.
+Utilisateur : Comment répondre à une question inconnue ?
+LoganAI : Il faut reconnaître que l'on ne connaît pas la réponse, préciser ce qui manque et proposer une façon fiable de vérifier l'information.
+Utilisateur : Comment formuler une demande claire ?
+LoganAI : Indiquez l'objectif, le contexte utile et le résultat attendu. Des consignes précises réduisent les risques de malentendu.
+Utilisateur : Que signifie « probablement » ?
+LoganAI : « Probablement » signifie qu'une chose semble vraisemblable, sans être certaine. Ce mot exprime un degré de confiance.
+Utilisateur : Que signifie « cependant » ?
+LoganAI : « Cependant » introduit une opposition ou une limite à ce qui vient d'être dit. Il est proche de « toutefois ».
+Utilisateur : Que signifie « par conséquent » ?
+LoganAI : « Par conséquent » introduit une conséquence logique. On peut aussi employer « donc » ou « ainsi » selon la phrase.
+Utilisateur : Que signifie « en revanche » ?
+LoganAI : « En revanche » introduit une opposition ou un contraste entre deux idées.
+Utilisateur : Quelle est la différence entre un fait et une opinion ?
+LoganAI : Un fait peut être vérifié à l'aide d'éléments observables. Une opinion exprime un jugement ou un point de vue personnel.
+Utilisateur : Comment reconnaître une fausse information ?
+LoganAI : Vérifiez la source, la date et les preuves présentées. Comparez l'information avec plusieurs sources fiables avant de la partager.
+Utilisateur : Pourquoi les titres peuvent-ils être trompeurs ?
+LoganAI : Un titre peut simplifier ou exagérer le contenu pour attirer l'attention. Il faut lire l'article et vérifier le contexte avant de conclure.
+Utilisateur : Qu'est-ce qu'une source primaire ?
+LoganAI : Une source primaire est un document ou un témoignage directement lié à l'événement ou à l'objet étudié, comme une lettre originale ou un résultat expérimental.
+Utilisateur : Qu'est-ce qu'une source secondaire ?
+LoganAI : Une source secondaire analyse ou interprète des sources primaires. Un manuel ou un article de synthèse peut être une source secondaire.
+Utilisateur : Comment organiser un texte argumentatif ?
+LoganAI : Présentez une thèse, développez des arguments accompagnés d'exemples, puis concluez en rappelant l'idée principale.
+Utilisateur : Qu'est-ce qu'une métaphore ?
+LoganAI : Une métaphore rapproche deux éléments sans utiliser d'outil de comparaison explicite. Elle donne une image pour exprimer une idée.
+Utilisateur : Qu'est-ce qu'une comparaison ?
+LoganAI : Une comparaison rapproche deux éléments à l'aide d'un outil comme « comme », « tel » ou « semblable à ».
+Utilisateur : Qu'est-ce qu'un récit ?
+LoganAI : Un récit raconte une suite d'événements, réels ou imaginaires. Il comporte souvent des personnages, un cadre et une progression.
+Utilisateur : Qu'est-ce qu'un dialogue ?
+LoganAI : Un dialogue est un échange de paroles entre deux personnes ou davantage. À l'écrit, les prises de parole sont généralement indiquées par des tirets ou des guillemets.
+Utilisateur : Qu'est-ce qu'une traduction ?
+LoganAI : Une traduction consiste à exprimer dans une langue le sens d'un texte écrit ou prononcé dans une autre langue.
+Utilisateur : Comment éviter les répétitions dans un texte ?
+LoganAI : Utilisez des pronoms, reformulez certaines phrases ou choisissez des synonymes adaptés. Vérifiez toutefois que le sens reste précis.
+Utilisateur : Comment écrire une conclusion ?
+LoganAI : Une conclusion rappelle la réponse principale et les idées essentielles. Elle peut ouvrir sur une question liée au sujet, sans introduire un nouveau développement.
+Utilisateur : Comment faire une liste claire ?
+LoganAI : Regroupez les éléments de même nature, utilisez des formulations parallèles et classez-les dans un ordre logique.
+Utilisateur : Comment expliquer une procédure ?
+LoganAI : Présentez les étapes dans l'ordre, utilisez des verbes d'action et signalez les conditions ou précautions importantes.
+Utilisateur : Que faire si une application ne répond plus ?
+LoganAI : Attendez un instant, puis essayez de fermer et de relancer l'application. Si le problème persiste, notez le message d'erreur et consultez l'aide officielle.
+Utilisateur : Pourquoi faut-il sauvegarder son travail ?
+LoganAI : Une sauvegarde permet de retrouver ses fichiers après une panne, une erreur ou une suppression accidentelle. Enregistrez régulièrement les changements importants.
+Utilisateur : Qu'est-ce qu'un fichier compressé ?
+LoganAI : Un fichier compressé regroupe un ou plusieurs fichiers dans un format qui peut réduire leur taille ou faciliter leur transfert, comme ZIP.
+Utilisateur : Qu'est-ce qu'un système d'exploitation ?
+LoganAI : Un système d'exploitation gère les ressources d'un appareil et permet aux applications de fonctionner. Windows, macOS, Linux, Android et iOS en sont des exemples.
+Utilisateur : Qu'est-ce qu'une application mobile ?
+LoganAI : Une application mobile est un logiciel conçu pour fonctionner sur un téléphone ou une tablette.
+Utilisateur : Qu'est-ce qu'une mise à jour logicielle ?
+LoganAI : Une mise à jour logicielle remplace ou complète une version existante afin de corriger des problèmes, améliorer des fonctions ou renforcer la sécurité.
+Utilisateur : Pourquoi tester sur plusieurs appareils ?
+LoganAI : Les écrans, navigateurs et systèmes peuvent se comporter différemment. Tester plusieurs appareils aide à repérer les problèmes de compatibilité.
+Utilisateur : Qu'est-ce qu'une donnée structurée ?
+LoganAI : Une donnée structurée suit un format défini, ce qui facilite son stockage, sa recherche et son traitement automatique.
+Utilisateur : Qu'est-ce qu'un tableau ?
+LoganAI : Un tableau organise des informations en lignes et en colonnes. Il permet de comparer rapidement plusieurs éléments.
+Utilisateur : Qu'est-ce qu'une clé étrangère ?
+LoganAI : Une clé étrangère est un champ qui référence une clé primaire ou une clé unique dans une autre table. Elle permet de représenter une relation entre les tables.
+Utilisateur : Pourquoi vérifier les droits d'accès ?
+LoganAI : Les droits d'accès déterminent qui peut consulter ou modifier une ressource. Il faut accorder uniquement les permissions nécessaires à chaque personne ou service.
+Utilisateur : Que signifie collaborer ?
+LoganAI : Collaborer signifie travailler avec d'autres personnes vers un objectif commun, en partageant les informations et en coordonnant les tâches.
+Utilisateur : Comment résoudre un désaccord calmement ?
+LoganAI : Écoutez le point de vue de l'autre personne, expliquez le vôtre sans accusation et cherchez les faits ou les objectifs communs.
+Utilisateur : Comment donner un avis constructif ?
+LoganAI : Décrivez un élément précis, expliquez son effet et proposez une amélioration concrète. Évitez les jugements sur la personne.
+Utilisateur : Comment recevoir une critique ?
+LoganAI : Écoutez la remarque, demandez un exemple si nécessaire et distinguez les éléments utiles des opinions. Vous pouvez ensuite décider de ce qui mérite d'être changé.
+Utilisateur : Pourquoi faut-il vérifier les résultats d'un calcul ?
+LoganAI : Une vérification permet de repérer une erreur de méthode ou de saisie. On peut refaire le calcul autrement ou estimer si le résultat est plausible.
+Utilisateur : Qu'est-ce qu'une hypothèse scientifique ?
+LoganAI : Une hypothèse scientifique est une explication provisoire qui peut être confrontée à des observations ou à des expériences.
+Utilisateur : Qu'est-ce qu'une expérience scientifique ?
+LoganAI : Une expérience scientifique suit une méthode permettant d'observer un phénomène et de tester une hypothèse dans des conditions définies.
+Utilisateur : Qu'est-ce qu'une observation ?
+LoganAI : Une observation consiste à recueillir des informations à l'aide des sens ou d'instruments, sans confondre ce qui est observé avec son interprétation.
+Utilisateur : Qu'est-ce qu'une conclusion scientifique ?
+LoganAI : Une conclusion scientifique résume ce que les résultats permettent d'affirmer et indique les limites de l'expérience.
+Utilisateur : Qu'est-ce que la température ?
+LoganAI : La température mesure l'état thermique d'un corps. Elle s'exprime couramment en degrés Celsius dans la vie quotidienne.
+Utilisateur : Qu'est-ce que la matière ?
+LoganAI : La matière est ce qui compose les objets physiques. Elle possède notamment une masse et occupe un volume.
+Utilisateur : Qu'est-ce qu'un atome ?
+LoganAI : Un atome est une unité de base d'un élément chimique. Il contient un noyau entouré d'électrons.
+Utilisateur : Qu'est-ce qu'une molécule ?
+LoganAI : Une molécule est un ensemble d'atomes liés entre eux. L'eau, par exemple, est constituée de molécules H2O.
+Utilisateur : Qu'est-ce que l'électricité ?
+LoganAI : L'électricité regroupe des phénomènes liés à la présence et au déplacement de charges électriques. Elle permet notamment d'alimenter de nombreux appareils.
+Utilisateur : Qu'est-ce que la lumière ?
+LoganAI : La lumière est un rayonnement électromagnétique visible par l'œil humain. Elle transporte de l'énergie et se propage dans le vide.
+Utilisateur : Qu'est-ce que le son ?
+LoganAI : Le son est une vibration qui se propage dans un milieu matériel, comme l'air, l'eau ou un solide. Il ne se propage pas dans le vide.
+Utilisateur : Pourquoi le Soleil est-il important pour la Terre ?
+LoganAI : Le Soleil fournit l'essentiel de l'énergie qui alimente le climat et la photosynthèse sur Terre. Sa lumière et sa chaleur rendent la vie telle que nous la connaissons possible.
+Utilisateur : Qu'est-ce qu'une carte géographique ?
+LoganAI : Une carte géographique représente un espace à une échelle donnée. Elle utilise des symboles et une légende pour présenter les informations.
+Utilisateur : Qu'est-ce qu'une frontière ?
+LoganAI : Une frontière est une limite qui sépare des territoires ou des États. Elle peut être terrestre, maritime ou définie par des accords.
+Utilisateur : Qu'est-ce qu'une démocratie ?
+LoganAI : Une démocratie est un système politique dans lequel le pouvoir repose sur le peuple, directement ou par l'intermédiaire de représentants élus.
+Utilisateur : Qu'est-ce qu'une constitution ?
+LoganAI : Une constitution est un ensemble de règles fondamentales qui organise les institutions d'un État et définit les principes de son fonctionnement.
+Utilisateur : Pourquoi apprend-on l'histoire ?
+LoganAI : L'histoire étudie les sociétés et les événements du passé à partir de sources. Elle aide à comprendre les changements et les continuités dans le temps.
+Utilisateur : Qu'est-ce qu'une frise chronologique ?
+LoganAI : Une frise chronologique représente des événements dans leur ordre temporel. Elle permet de visualiser les dates et les périodes.
+Utilisateur : Qu'est-ce qu'une décennie ?
+LoganAI : Une décennie est une période de dix années.
+Utilisateur : Qu'est-ce qu'un siècle ?
+LoganAI : Un siècle est une période de cent années.
+Utilisateur : Qu'est-ce qu'un millénaire ?
+LoganAI : Un millénaire est une période de mille années.
+Utilisateur : Comment convertir des kilomètres en mètres ?
+LoganAI : Pour convertir des kilomètres en mètres, multipliez le nombre de kilomètres par 1 000. Par exemple, 2 kilomètres correspondent à 2 000 mètres.
+Utilisateur : Combien de grammes y a-t-il dans un kilogramme ?
+LoganAI : Un kilogramme contient 1 000 grammes.
+Utilisateur : Combien de millilitres y a-t-il dans un litre ?
+LoganAI : Un litre contient 1 000 millilitres.
+Utilisateur : Comment lire l'heure sur une horloge ?
+LoganAI : La petite aiguille indique les heures et la grande aiguille indique les minutes. Chaque chiffre de la grande aiguille correspond à cinq minutes.
+Utilisateur : Comment préparer une présentation orale ?
+LoganAI : Organisez votre propos en quelques parties, utilisez des notes courtes et répétez à voix haute. Parlez distinctement et adaptez le rythme au public.
+Utilisateur : Comment demander une précision ?
+LoganAI : Vous pouvez demander « Que voulez-vous dire exactement par ce terme ? » ou « Pouvez-vous donner un exemple ? ».
+Utilisateur : Comment dire que l'on n'est pas d'accord ?
+LoganAI : Vous pouvez dire « Je comprends votre point de vue, mais je ne partage pas cette conclusion » puis expliquer calmement votre raison.
+Utilisateur : Comment proposer une idée ?
+LoganAI : Présentez l'idée en une phrase, expliquez le problème qu'elle résout et donnez un exemple de mise en œuvre.
+Utilisateur : Comment vérifier l'orthographe d'un mot ?
+LoganAI : Consultez un dictionnaire fiable et vérifiez le mot dans une phrase. Un correcteur peut aider, mais il faut aussi relire le résultat.
+Utilisateur : Qu'est-ce qu'un dictionnaire ?
+LoganAI : Un dictionnaire présente des mots, leur orthographe, leur prononciation et leurs différents sens. Il peut aussi donner des exemples d'emploi.
+Utilisateur : Qu'est-ce qu'un synonyme de « heureux » ?
+LoganAI : Selon le contexte, « content », « joyeux » ou « ravi » peuvent être des synonymes de « heureux ».
+Utilisateur : Qu'est-ce qu'un synonyme de « rapide » ?
+LoganAI : Selon le contexte, « vite », « prompt » ou « véloce » peuvent exprimer une idée proche de « rapide ».
+Utilisateur : Quel est le contraire de « facile » ?
+LoganAI : Le contraire de « facile » est généralement « difficile » ou « compliqué », selon le contexte.
+Utilisateur : Quel est le contraire de « commencer » ?
+LoganAI : Le contraire de « commencer » est « terminer » ou « finir ».
+Utilisateur : Comment conjuguer le verbe être au présent ?
+LoganAI : Au présent, on dit : je suis, tu es, il ou elle est, nous sommes, vous êtes, ils ou elles sont.
+Utilisateur : Comment conjuguer le verbe avoir au présent ?
+LoganAI : Au présent, on dit : j'ai, tu as, il ou elle a, nous avons, vous avez, ils ou elles ont.
+Utilisateur : Comment conjuguer le verbe aller au présent ?
+LoganAI : Au présent, on dit : je vais, tu vas, il ou elle va, nous allons, vous allez, ils ou elles vont.
+Utilisateur : Comment conjuguer le verbe faire au présent ?
+LoganAI : Au présent, on dit : je fais, tu fais, il ou elle fait, nous faisons, vous faites, ils ou elles font.
