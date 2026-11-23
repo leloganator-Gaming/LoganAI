@@ -90,8 +90,8 @@ async function loadKnowledge() {
   let question = null;
   knowledgePairs = [];
   for (const line of lines) {
-    const q = line.match(/^Utilisateur\\s*:\\s*(.+)$/i);
-    const a = line.match(/^LoganAI\\s*:\\s*(.+)$/i);
+    const q = line.match(/^Utilisateur\s*:\s*(.+)$/i);
+    const a = line.match(/^LoganAI\s*:\s*(.+)$/i);
     if (q) question = q[1].trim();
     else if (a && question) {
       knowledgePairs.push({question, answer: a[1].trim(), words: normalizeWords(question)});
