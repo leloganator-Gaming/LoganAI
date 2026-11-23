@@ -200,14 +200,22 @@ async function loadModel() {
       : "Modèle exécuté sur cet appareil.";
     status.textContent = "Modèle navigateur chargé"; modelState.textContent = "ONNX / WASM prêt";
   } catch (error) {
-    status.textContent = "Modèle indisponible"; modelState.textContent = "En attente du modèle";
-    $("#composerNote").textContent = "Le modèle n'est pas encore publié. Relancez le workflow GitHub Pages après fusion.";
-    $("#prompt").placeholder = "Modèle non disponible pour le moment…";
+    status.textContent = knowledgePairs.length ? "Base française disponible" : "Modèle indisponible";
+    modelState.textContent = knowledgePairs.length ? "Base de connaissances prête" : "En attente du modèle";
+    if (knowledgePairs.length) {
+      $("#prompt").disabled = false;
+      $("#chatForm button").disabled = false;
+      $("#prompt").placeholder = "Écrivez un message à LoganAI…";
+      $("#composerNote").textContent = "Le mode questions-réponses reste disponible sans le modèle neuronal.";
+    } else {
+      $("#composerNote").textContent = "La base française et le modèle ne sont pas disponibles. Réessayez plus tard.";
+      $("#prompt").placeholder = "Service indisponible pour le moment…";
+    }
     console.error(error);
   }
 }
 $("#chatForm").addEventListener("submit", async (event) => {
-  event.preventDefault(); const input = $("#prompt"), message = input.value.trim(); if (!message || !session) return;
+  event.preventDefault(); const input = $("#prompt"), message = input.value.trim(); if (!message || (!session && !knowledgePairs.length)) return;
   input.value = ""; addBubble("user", message);
   const button = $("#chatForm button"); button.disabled = true; button.textContent = "Réflexion…";
   try {
