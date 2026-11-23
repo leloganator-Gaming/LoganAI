@@ -104,6 +104,20 @@ function softmaxSample(logits, temperature = 0.68, topK = 24) {
   for (let i = 0; i < candidates.length; i++) { pick -= weights[i]; if (pick <= 0) return candidates[i].id; }
   return candidates[0].id;
 }
+function isReadableFrench(text) {
+  if (!text || text.includes("\uFFFD")) return false;
+  const words = text.match(/[A-Za-zÀ-ÖØ-öø-ÿ]{2,}/g) || [];
+  if (words.length < 3) return false;
+  const letters = (text.match(/[A-Za-zÀ-ÖØ-öø-ÿ]/g) || []).length;
+  const vowels = (text.match(/[aeiouyàâäéèêëïîôöùûüÿ]/gi) || []).length;
+  if (!letters || vowels / letters < 0.22 || vowels / letters > 0.68) return false;
+  if (/(.)\\1{4,}/i.test(text)) return false;
+  return true;
+}
+function unknownAnswer() {
+  return "Je n'ai pas encore appris à répondre correctement à cette question. Je peux déjà traiter plusieurs sujets comme le français, les sciences, les mathématiques et l'informatique. Essayez de préciser votre demande.";
+}
+
 async function generateReply(message) {
   if (!session) throw new Error("Le modèle n'est pas encore chargé.");
   const memories = readStore().memories;
@@ -122,8 +136,8 @@ async function generateReply(message) {
     generated.push(next); ids.push(next);
     if (next === 10 && generated.length > 12) break;
   }
-  return decoder.decode(new Uint8Array(generated)).split(/\n(?:Utilisateur|LoganAI)\s*:/)[0].trim()
-    || "Je n'ai pas réussi à formuler une réponse. Reformulez votre question.";
+  const answer = decoder.decode(new Uint8Array(generated)).split(/\n(?:Utilisateur|LoganAI)\s*:/)[0].trim();
+  return isReadableFrench(answer) ? answer : unknownAnswer();
 }
 
 async function loadModel() {
