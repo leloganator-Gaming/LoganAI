@@ -55,8 +55,11 @@ def test_browser_prefers_known_french_answers_before_neural_generation():
     app = (DOCS / "app.js").read_text(encoding="utf-8")
     assert 'fetch("./knowledge.txt"' in app
     assert "function findKnowledgeAnswer(message)" in app
-    assert "knownAnswer || await generateReply(message)" in app
-    assert "temperature = 0.68, topK = 24" in app
+    assert "knownAnswer || unknownAnswer()" in app
+    assert "function conversationalAnswer(message)" in app
+    assert "documentFrequency" in app
+    assert "function normalizeWords(text)" in app
+    assert "if (!message || (!session && !knowledgePairs.length)) return;" in app
 
 
 def test_browser_rejects_unreadable_neural_output_with_french_fallback():
@@ -65,3 +68,11 @@ def test_browser_rejects_unreadable_neural_output_with_french_fallback():
     assert "return isReadableFrench(answer) ? answer : unknownAnswer();" in app
     assert "function unknownAnswer()" in app
     assert "Je n'ai pas encore appris à répondre correctement" in app
+
+
+def test_knowledge_parser_uses_flexible_french_dialogue_labels():
+    app = (DOCS / "app.js").read_text(encoding="utf-8")
+    assert r"line.match(/^Utilisateur\s*:\s*(.+)$/i)" in app
+    assert r"line.match(/^LoganAI\s*:\s*(.+)$/i)" in app
+    assert "function conversationalAnswer(message)" in app
+    assert "Bonjour ! Que souhaitez-vous savoir ou faire aujourd'hui ?" in app
