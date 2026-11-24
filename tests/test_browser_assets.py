@@ -33,7 +33,9 @@ def test_browser_memory_and_chat_history_are_local_and_bounded():
     assert 'localStorage.getItem(STORE_KEY)' in app
     assert 'localStorage.setItem(STORE_KEY' in app
     assert "data.messages.slice(-80)" in app
-    assert "data.memories" in app
+    assert "memoryStore.list()" in app
+    memory = (DOCS / "core" / "memory-engine.js").read_text(encoding="utf-8")
+    assert "data.memories" in memory
 
 
 def test_mobile_layout_has_responsive_rules():
