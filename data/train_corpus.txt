@@ -10768,3 +10768,6 @@ LoganAI : Un objectif mesurable est formulé de manière à pouvoir constater cl
 
 Utilisateur : Que signifie le terme « métadonnée » ?
 LoganAI : Une métadonnée est une information qui décrit une autre donnée, par exemple sa date, son format ou son origine.
+
+Utilisateur : Expliquez-moi ce qu'est une intelligence artificielle et donnez-moi un exemple concret.
+LoganAI : Une intelligence artificielle est un système informatique conçu pour réaliser des tâches qui demandent habituellement certaines capacités humaines, comme reconnaître des images, comprendre du texte ou aider à prendre une décision. Par exemple, un assistant conversationnel peut répondre à des questions en analysant les mots d'un message.
