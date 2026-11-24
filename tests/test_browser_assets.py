@@ -90,3 +90,11 @@ def test_structured_memory_module_and_controls_are_wired():
     assert "createMemoryStore(readStore, writeStore)" in app
     assert "memoryStore.respond(message)" in app
     assert "function createMemoryStore" in memory
+
+
+def test_personal_memory_is_not_injected_into_neural_prompts_automatically():
+    app = (DOCS / "app.js").read_text(encoding="utf-8")
+    generation = app.split("async function generateReply(message)", 1)[1].split("async function loadModel()", 1)[0]
+    assert "const prefix = \"Utilisateur : \" + message.trim()" in generation
+    assert "readStore().memories" not in generation
+    assert "Informations mémorisées" not in generation
