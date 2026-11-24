@@ -76,4 +76,17 @@ def test_knowledge_parser_uses_flexible_french_dialogue_labels():
     assert r"line.match(/^LoganAI\s*:\s*(.+)$/i)" in app
     html = (DOCS / "index.html").read_text(encoding="utf-8")
     assert 'src="./core/conversation-engine.js"' in html
-    assert "Bonjour ! Que souhaitez-vous savoir ou faire aujourd'hui ?" in app
+    conversation = (DOCS / "core" / "conversation-engine.js").read_text(encoding="utf-8")
+    assert "Bonjour ! Que souhaitez-vous savoir ou faire aujourd'hui ?" in conversation
+
+
+def test_structured_memory_module_and_controls_are_wired():
+    html = (DOCS / "index.html").read_text(encoding="utf-8")
+    app = (DOCS / "app.js").read_text(encoding="utf-8")
+    memory = (DOCS / "core" / "memory-engine.js").read_text(encoding="utf-8")
+    assert 'src="./core/memory-engine.js"' in html
+    assert 'id="memoryType"' in html
+    assert 'id="clearMemory"' in html
+    assert "createMemoryStore(readStore, writeStore)" in app
+    assert "memoryStore.respond(message)" in app
+    assert "function createMemoryStore" in memory
