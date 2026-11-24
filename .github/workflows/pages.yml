@@ -60,7 +60,7 @@ jobs:
       - name: Prepare the French knowledge base for the browser
         run: cp data/train_corpus.txt docs/knowledge.txt
       - name: Train the browser model on the expanded corpus
-        run: python -m loganai.training --steps 800 --batch-size 2 --eval-interval 100 --save-interval 800
+        run: python -m loganai.training --steps 2400 --batch-size 2 --eval-interval 100 --save-interval 800
       - name: Export model to ONNX
         run: python export_onnx.py
       - name: Validate ONNX model
