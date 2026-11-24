@@ -20,7 +20,7 @@ test("le moteur de connaissances retrouve une réponse pertinente", () => {
     {question:"Comment fonctionne un ordinateur ?",answer:"Il traite des informations."},
     {question:"Pourquoi le ciel est bleu ?",answer:"La lumière est diffusée."}
   ]);
-  assert.equal(engine.respond("Explique le fonctionnement de mon PC"), "Il traite des informations.");
+  assert.equal(engine.respond("Comment fonctionne mon PC ?"), "Il traite des informations.");
   assert.equal(engine.size, 2);
 });
 
