@@ -57,3 +57,17 @@ test("conserve une réponse qui passe la validation linguistique", async () => {
   });
   assert.equal(await engine.respond("Bonjour"), "Une phrase française correcte.");
 });
+
+test("rejette les sorties qui répètent artificiellement les mêmes mots", () => {
+  assert.equal(
+    Neural.isReadableFrench("Une prone dest dest dest des des des précons des des des des"),
+    false
+  );
+});
+
+test("accepte une phrase française cohérente", () => {
+  assert.equal(
+    Neural.isReadableFrench("Une intelligence artificielle peut analyser un texte et proposer une réponse."),
+    true
+  );
+});
