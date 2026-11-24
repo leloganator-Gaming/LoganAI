@@ -7,7 +7,8 @@ let session = null;
 let lastAssistant = "";
 const knowledgeEngine = window.LoganAIKnowledge.createEngine();
 const aiCore = window.LoganAI.createCore({ fallback: unknownAnswer });
-const memoryStore = window.LoganAIMemory.createMemoryStore(readStore, writeStore);\nconst neuralEngine = window.LoganAINeural.createEngine({\n  isReady: () => Boolean(session),\n  generate: (message) => generateReply(message)\n});
+const memoryStore = window.LoganAIMemory.createMemoryStore(readStore, writeStore);
+const neuralEngine = window.LoganAINeural.createEngine({\n  isReady: () => Boolean(session),\n  generate: (message) => generateReply(message)\n});
 
 function readStore() {
   try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { memories: [], messages: [] }; }
@@ -93,7 +94,8 @@ async function loadKnowledge() {
 
 aiCore.registerEngine("conversation", ({ message }) => window.LoganAIConversation.respond(message), 100);
 aiCore.registerEngine("memory", ({ message }) => memoryStore.respond(message), 80);
-aiCore.registerEngine("knowledge", ({ message }) => knowledgeEngine.respond(message), 50);\naiCore.registerEngine("neural", ({ message }) => neuralEngine.respond(message), 10);
+aiCore.registerEngine("knowledge", ({ message }) => knowledgeEngine.respond(message), 50);
+aiCore.registerEngine("neural", ({ message }) => neuralEngine.respond(message), 10);
 
 function bytesToIds(text) { return Array.from(encoder.encode(text)); }
 function softmaxSample(logits, temperature = 0.68, topK = 24) {
