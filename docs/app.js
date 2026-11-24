@@ -122,9 +122,8 @@ function unknownAnswer() {
 
 async function generateReply(message) {
   if (!session) throw new Error("Le modèle n'est pas encore chargé.");
-  const memories = readStore().memories;
-  const memoryText = memories.length ? "Informations mémorisées : " + memories.join(" ; ") + "\n" : "";
-  const prefix = memoryText + "Utilisateur : " + message.trim() + "\nLoganAI :";
+  // Les notes personnelles ne sont jamais injectées automatiquement dans le prompt neuronal.
+  const prefix = "Utilisateur : " + message.trim() + "\nLoganAI :";
   const ids = bytesToIds(prefix).slice(-512);
   const generated = [];
   for (let step = 0; step < 80; step++) {
