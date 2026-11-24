@@ -16,7 +16,9 @@
     async function respond(message) {
       if (typeof message !== "string" || !message.trim() || !isReady()) return null;
       const answer = await options.generate(message.trim());
-      return typeof answer === "string" && answer.trim() ? answer.trim() : null;
+      if (typeof answer !== "string" || !answer.trim()) return null;
+      if (typeof options.validate === "function" && !options.validate(answer.trim())) return null;
+      return answer.trim();
     }
 
     return Object.freeze({ respond });
