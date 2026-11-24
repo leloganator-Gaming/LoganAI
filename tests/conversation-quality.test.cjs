@@ -115,3 +115,13 @@ test("une réponse connue passe avant le moteur neuronal", async () => {
   assert.equal(result.source, "knowledge");
   assert.equal(neuralCalls, 0);
 });
+
+test("retrouve une réponse précise à une question sur l'intelligence artificielle avec exemple", () => {
+  const engine = createKnowledge();
+  engine.addPairs([{
+    question: "Expliquez-moi ce qu'est une intelligence artificielle et donnez-moi un exemple concret.",
+    answer: "Une intelligence artificielle est un système informatique conçu pour réaliser des tâches qui demandent habituellement certaines capacités humaines, comme reconnaître des images, comprendre du texte ou aider à prendre une décision. Par exemple, un assistant conversationnel peut répondre à des questions en analysant les mots d'un message."
+  }]);
+  const answer = engine.respond("Expliquez-moi ce qu'est une intelligence artificielle et donnez-moi un exemple concret.");
+  assert.match(answer, /assistant conversationnel/);
+});
