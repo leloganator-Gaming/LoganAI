@@ -15,6 +15,20 @@ Un moteur est une fonction asynchrone ou synchrone recevant `{ message, context 
 ### Limites actuelles
 Cette phase ne crée pas un nouveau grand modèle, n'entraîne pas les poids, n'ajoute pas de recherche Internet et ne synchronise pas la mémoire locale. Le modèle ONNX existant reste expérimental. Les moteurs conversation et connaissances utilisent encore les fonctions et le corpus déjà présents dans l'application.
 
+## Phase 2 — Extraction des moteurs (0.2.0)
+
+Les fonctions de dialogue et de recherche dans la base française sont maintenant séparées du fichier principal de l'interface.
+
+- `docs/core/conversation-engine.js` : réponses conversationnelles déterministes aux formulations courantes.
+- `docs/core/knowledge-engine.js` : normalisation du français, synonymes, indexation et recherche pondérée dans le corpus.
+- `docs/core/orchestrator.js` : sélectionne le moteur à interroger et fournit la réponse de secours.
+- `docs/app.js` : interface, chargement du corpus, stockage local et raccordement des modules.
+
+Le moteur de connaissances accepte l'ajout d'exemples issus de l'atelier d'auto-apprentissage, sans leur attribuer automatiquement le statut de connaissances vérifiées. Des tests Node couvrent les moteurs séparément.
+
+### Limites maintenues
+Le moteur de dialogue reste fondé sur des règles simples. Le moteur de connaissances effectue une recherche lexicale pondérée, pas une compréhension sémantique profonde. Le modèle ONNX n'est pas encore intégré comme moteur génératif de réponse : son entraînement et sa qualité restent expérimentaux.
+
 ## Phases suivantes
 1. Définir des contrats et tests pour mémoire, raisonnement, apprentissage et outils.
 2. Extraire les moteurs existants dans des modules séparés.
