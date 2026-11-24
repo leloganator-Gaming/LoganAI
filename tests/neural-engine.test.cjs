@@ -38,3 +38,22 @@ test("ignore les entrées vides et les sorties vides", async () => {
 test("exige une fonction de génération", () => {
   assert.throws(() => Neural.createEngine({}), /génération neuronale/);
 });
+
+
+test("rejette une sortie qui échoue à la validation linguistique", async () => {
+  const engine = Neural.createEngine({
+    isReady: () => true,
+    generate: async () => "Unitiene estataten le int on ele len d'unt d'e res d'at",
+    validate: (answer) => answer === "Une phrase française correcte."
+  });
+  assert.equal(await engine.respond("Bonjour"), null);
+});
+
+test("conserve une réponse qui passe la validation linguistique", async () => {
+  const engine = Neural.createEngine({
+    isReady: () => true,
+    generate: async () => "Une phrase française correcte.",
+    validate: (answer) => answer === "Une phrase française correcte."
+  });
+  assert.equal(await engine.respond("Bonjour"), "Une phrase française correcte.");
+});
