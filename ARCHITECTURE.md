@@ -36,3 +36,11 @@ Le moteur de dialogue reste fondé sur des règles simples. Le moteur de connais
 4. Construire un moteur de raisonnement avec étapes vérifiables et gestion explicite de l'incertitude.
 5. Ajouter un moteur d'apprentissage évalué : aucune connaissance nouvelle ne sera publiée sans validation.
 6. Déplacer les traitements qui nécessitent un calcul partagé vers un service serveur sécurisé ; ne jamais exposer de secret dans GitHub Pages.
+
+## Phase 3 — Mémoire structurée locale (0.3.0)
+
+Le module `docs/core/memory-engine.js` sépare les notes et préférences personnelles. Il migre les anciennes chaînes `memories` vers des objets typés sans effacer l'historique, fournit la liste, l'ajout, la suppression ciblée et l'effacement complet. Les demandes explicites de rappel peuvent consulter ces éléments ; les autres messages ne les exposent pas.
+
+Les entrées sont limitées en longueur et certains motifs sensibles (identifiants de connexion, coordonnées et données médicales) sont refusés. Cette détection est une protection de base, pas un filtre infaillible : l'interface avertit donc de ne pas enregistrer de données sensibles. Les données restent dans le `localStorage` du navigateur courant, sans synchronisation ni sauvegarde serveur.
+
+Des tests Node vérifient la migration, les catégories, les refus, la suppression et le rappel explicite.
