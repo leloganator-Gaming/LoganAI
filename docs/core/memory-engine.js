@@ -24,12 +24,22 @@
     function state() {
       const data = readStore() || {};
       const legacy = Array.isArray(data.memories) ? data.memories : [];
-      if (!Array.isArray(data.memoryItems)) {
+      const hadStructuredItems = Array.isArray(data.memoryItems);
+      if (!hadStructuredItems) {
         data.memoryItems = legacy.filter(isSafeText).map((text, index) => ({
           id: "legacy-" + index, type: "note", text: clean(text), createdAt: null
         }));
-        writeStore(data);
       }
+      const safeItems = data.memoryItems.filter((item) =>
+        item && TYPES.has(item.type) && isSafeText(item.text)
+      );
+      const safeLegacy = safeItems.map((item) => item.text);
+      const changed = !hadStructuredItems ||
+        JSON.stringify(data.memoryItems) !== JSON.stringify(safeItems) ||
+        JSON.stringify(legacy) !== JSON.stringify(safeLegacy);
+      data.memoryItems = safeItems;
+      data.memories = safeLegacy;
+      if (changed) writeStore(data);
       return data;
     }
     function list() {
