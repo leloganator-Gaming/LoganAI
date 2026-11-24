@@ -1,3 +1,4 @@
+// Phase 2: l’interface délègue les réponses aux moteurs modulaires du noyau hybride.
 const $ = (s) => document.querySelector(s);
 const STORE_KEY = "loganai.browser.v1";
 const encoder = new TextEncoder();
