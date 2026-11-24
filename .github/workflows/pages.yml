@@ -15,6 +15,7 @@ on:
     branches: [main]
     paths:
       - "docs/**"
+      - "tests/**"
       - "loganai/**"
       - "data/train_corpus.txt"
       - "export_onnx.py"
