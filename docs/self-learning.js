@@ -73,6 +73,8 @@
     base = pairs; readStore = read; writeStore = write; onApprove = approved;
     $("#generateExamples")?.addEventListener("click", generate);
     $("#exportExamples")?.addEventListener("click", exportData);
+    const savedApproved = state().learning.filter(x => x.status === "approved");
+    if (savedApproved.length) onApprove?.(savedApproved);
     render();
   }};
 })();
