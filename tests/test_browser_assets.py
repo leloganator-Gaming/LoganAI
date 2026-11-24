@@ -64,10 +64,10 @@ def test_browser_prefers_known_french_answers_before_neural_generation():
     assert 'src="./core/conversation-engine.js"' in html
 
 
-def test_browser_rejects_unreadable_neural_output_with_french_fallback():
+def test_browser_rejects_unreadable_neural_output_for_orchestrator_fallback():
     app = (DOCS / "app.js").read_text(encoding="utf-8")
     assert "function isReadableFrench(text)" in app
-    assert "return isReadableFrench(answer) ? answer : unknownAnswer();" in app
+    assert "return isReadableFrench(answer) ? answer : null;" in app
     assert "function unknownAnswer()" in app
     assert "Je n'ai pas encore appris à répondre correctement" in app
 
