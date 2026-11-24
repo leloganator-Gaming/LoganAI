@@ -49,3 +49,9 @@ test("ne révèle les notes que pour une demande explicite de rappel", () => {
   assert.equal(store.respond("Bonjour"), null);
   assert.match(store.respond("Que sais-tu de moi ?"), /Préfère le français/);
 });
+
+test("écarte les anciennes entrées sensibles lors de la migration", () => {
+  const { store, read } = fixture({ memories: ["Une note neutre", "Mon mot de passe est abc123"] });
+  assert.equal(store.list().length, 1);
+  assert.deepEqual(read().memories, ["Une note neutre"]);
+});
