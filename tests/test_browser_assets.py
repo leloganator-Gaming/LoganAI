@@ -54,12 +54,12 @@ def test_french_corpus_is_expanded_and_published_for_retrieval():
 def test_browser_prefers_known_french_answers_before_neural_generation():
     app = (DOCS / "app.js").read_text(encoding="utf-8")
     assert 'fetch("./knowledge.txt"' in app
-    assert "function findKnowledgeAnswer(message)" in app
-    assert "knownAnswer || unknownAnswer()" in app
-    assert "function conversationalAnswer(message)" in app
-    assert "documentFrequency" in app
-    assert "function normalizeWords(text)" in app
-    assert "if (!message || (!session && !knowledgePairs.length)) return;" in app
+    assert "knowledgeEngine.respond(message)" in app
+    assert 'registerEngine("conversation"' in app
+    assert 'registerEngine("knowledge"' in app
+    html = (DOCS / "index.html").read_text(encoding="utf-8")
+    assert 'src="./core/knowledge-engine.js"' in html
+    assert 'src="./core/conversation-engine.js"' in html
 
 
 def test_browser_rejects_unreadable_neural_output_with_french_fallback():
@@ -74,5 +74,6 @@ def test_knowledge_parser_uses_flexible_french_dialogue_labels():
     app = (DOCS / "app.js").read_text(encoding="utf-8")
     assert r"line.match(/^Utilisateur\s*:\s*(.+)$/i)" in app
     assert r"line.match(/^LoganAI\s*:\s*(.+)$/i)" in app
-    assert "function conversationalAnswer(message)" in app
+    html = (DOCS / "index.html").read_text(encoding="utf-8")
+    assert 'src="./core/conversation-engine.js"' in html
     assert "Bonjour ! Que souhaitez-vous savoir ou faire aujourd'hui ?" in app
