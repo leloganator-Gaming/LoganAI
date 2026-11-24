@@ -4,7 +4,7 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8");
 let session = null;
 let lastAssistant = "";
-let knowledgePairs = [];
+const knowledgeEngine = window.LoganAIKnowledge.createEngine();
 const aiCore = window.LoganAI.createCore({ fallback: unknownAnswer });
 
 function readStore() {
@@ -56,118 +56,29 @@ $("#memoryForm").addEventListener("submit", (event) => {
   $("#memoryText").value = ""; renderMemories();
 });
 
-const STOP_WORDS = new Set([
-  "alors","avec","avoir","cela","comme","dans","depuis","des","donc","elle","elles","est","etre","fait","faire","ici","leur","leurs","mais","meme","mon","nous","par","pas","peut","pour","quoi","que","quel","quelle","quelles","quels","sans","ses","son","sur","tes","toi","ton","tous","tout","tres","une","uns","vous",
-  "les","des","aux","du","de","la","le","un","et","ou","en","a","au","ce","ces","cet","cette","qui","dont","je","tu","il","ils","on","me","te","se","ma","ta","sa","mes","nos","vos","y","ne","ni","plus","moins","bien","comment","pourquoi","quand","combien","estce",
-  "explique","expliquer","expliquez","definis","definir","definition","signification","signifie","signifier","terme","mot","mots","parle","parler","presente","presenter","donne","donner","peux","pouvez","sagit","cest","quest","quil","elle","fonctionne","fonctionner","utilite","sert"
-]);
-const WORD_ALIASES = new Map([
-  ["ordi","ordinateur"],["pc","ordinateur"],["microordinateur","ordinateur"],
-  ["auto","voiture"],["automobile","voiture"],["bagnole","voiture"],
-  ["bicyclette","velo"],["cycle","velo"],["bicloo","velo"],
-  ["portable","telephone"],["smartphone","telephone"],["mobile","telephone"],
-  ["web","internet"],["reseau mondial","internet"],
-  ["ia","intelligence"],["artificielle","artificielle"],
-  ["appli","application"],["logiciel","programme"],["progiciel","programme"],
-  ["photo","photographie"],["images","image"],["videos","video"],
-  ["courriel","email"],["mel","email"],["mail","email"],
-  ["chiffrement","cryptage"],["crypter","chiffrer"],["piratage","attaque"],
-  ["bug","erreur"],["bogue","erreur"],["plantage","panne"],
-  ["vite","rapide"],["rapidement","rapide"],["promptement","rapide"],
-  ["maison","habitation"],["logement","habitation"],["demeure","habitation"],
-  ["enseignant","professeur"],["instituteur","professeur"],["enseignante","professeur"],
-  ["élève","apprenant"],["etudiant","apprenant"],["étudiant","apprenant"],
-  ["commencer","debuter"],["demarrer","debuter"],["entamer","debuter"],
-  ["terminer","finir"],["achever","finir"],["clore","finir"],
-  ["aider","assister"],["soutenir","assister"],["accompagner","assister"]
-]);
-function normalizeWords(text) {
-  let normalized = text.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  normalized = normalized.replace(/\bintelligence artificielle\b/g, "intelligence");
-  return normalized.replace(/[^a-z0-9]+/g, " ").trim().split(/\s+/)
-    .map((word) => WORD_ALIASES.get(word) || word)
-    .filter((word) => word.length > 2 && !STOP_WORDS.has(word));
-}
-function conversationalAnswer(message) {
-  const value = message.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-  if (/^(salut|bonjour|bonsoir|coucou|hello|hey)(\b|[!. ,])/i.test(value)) {
-    return "Bonjour ! Que souhaitez-vous savoir ou faire aujourd'hui ?";
-  }
-  if (/^(merci|merci beaucoup|je te remercie|je vous remercie)(\b|[!. ,])/i.test(value)) {
-    return "Je vous en prie. Avez-vous une autre question ?";
-  }
-  if (/^(au revoir|a bientot|bonne journee|bonne soiree|a plus)(\b|[!. ,])/i.test(value)) {
-    return "Au revoir ! Passez une bonne journée.";
-  }
-  if (/^(comment ca va|ca va|tu vas bien|vous allez bien)\??[!. ]*$/i.test(value)) {
-    return "Je fonctionne correctement, merci. Et vous, que puis-je faire pour vous ?";
-  }
-  if (/^(qui es tu|tu es qui|presente toi)\??[!. ]*$/i.test(value)) {
-    return "Je suis LoganAI, un assistant expérimental développé autour d'un petit modèle neuronal et d'une base de connaissances française.";
-  }
-  return null;
-}
 async function loadKnowledge() {
   const response = await fetch("./knowledge.txt", {cache: "no-cache"});
   if (!response.ok) throw new Error("Base de connaissances indisponible.");
   const lines = (await response.text()).split(/\r?\n/);
   let question = null;
-  knowledgePairs = [];
+  const pairs = [];
   for (const line of lines) {
     const q = line.match(/^Utilisateur\s*:\s*(.+)$/i);
     const a = line.match(/^LoganAI\s*:\s*(.+)$/i);
     if (q) question = q[1].trim();
     else if (a && question) {
-      knowledgePairs.push({question, answer: a[1].trim(), words: normalizeWords(question)});
+      pairs.push({question, answer: a[1].trim(), words: window.LoganAIKnowledge.normalizeWords(question)});
       question = null;
     }
   }
-  if (window.LoganSelfLearning) window.LoganSelfLearning.init(knowledgePairs, readStore, writeStore, (items) => {
-    for (const item of items) knowledgePairs.push({question: item.question, answer: item.answer, words: normalizeWords(item.question)});
+  knowledgeEngine.setPairs(pairs);
+  if (window.LoganSelfLearning) window.LoganSelfLearning.init(pairs, readStore, writeStore, (items) => {
+    knowledgeEngine.addPairs(items);
   });
 }
-function findKnowledgeAnswer(message) {
-  const conversational = conversationalAnswer(message);
-  if (conversational) return conversational;
-  const queryWords = normalizeWords(message);
-  if (!queryWords.length) return null;
-  const query = new Set(queryWords);
-  const documentFrequency = new Map();
-  for (const item of knowledgePairs) {
-    for (const word of new Set(item.words)) {
-      documentFrequency.set(word, (documentFrequency.get(word) || 0) + 1);
-    }
-  }
-  let best = null;
-  let bestScore = 0;
-  let secondScore = 0;
-  for (const item of knowledgePairs) {
-    const words = new Set(item.words);
-    if (!words.size) continue;
-    let matchedWeight = 0;
-    let totalWeight = 0;
-    for (const word of query) {
-      const weight = 1 + Math.log(1 + knowledgePairs.length / (1 + (documentFrequency.get(word) || 0)));
-      totalWeight += weight;
-      if (words.has(word)) matchedWeight += weight;
-    }
-    const coverage = totalWeight ? matchedWeight / totalWeight : 0;
-    const precision = [...words].filter((word) => query.has(word)).length / Math.max(1, words.size);
-    const score = coverage * 0.82 + precision * 0.18;
-    if (score > bestScore) {
-      secondScore = bestScore;
-      bestScore = score;
-      best = item;
-    } else if (score > secondScore) {
-      secondScore = score;
-    }
-  }
-  if (bestScore < 0.72 || (bestScore - secondScore < 0.035 && bestScore < 0.94)) return null;
-  return best.answer;
-}
 
-aiCore.registerEngine("conversation", ({ message }) => conversationalAnswer(message), 100);
-aiCore.registerEngine("knowledge", ({ message }) => findKnowledgeAnswer(message), 50);
+aiCore.registerEngine("conversation", ({ message }) => window.LoganAIConversation.respond(message), 100);
+aiCore.registerEngine("knowledge", ({ message }) => knowledgeEngine.respond(message), 50);
 
 function bytesToIds(text) { return Array.from(encoder.encode(text)); }
 function softmaxSample(logits, temperature = 0.68, topK = 24) {
@@ -225,14 +136,14 @@ async function loadModel() {
     ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 1);
     session = await ort.InferenceSession.create("./model.onnx", {executionProviders: ["wasm"]});
     $("#prompt").disabled = false; $("#prompt").placeholder = "Écrivez un message à LoganAI…";
-    $("#chatForm button").disabled = false; $("#composerNote").textContent = knowledgePairs.length
+    $("#chatForm button").disabled = false; $("#composerNote").textContent = knowledgeEngine.size
       ? "Base de connaissances française chargée."
       : "Modèle exécuté sur cet appareil.";
     status.textContent = "Modèle navigateur chargé"; modelState.textContent = "ONNX / WASM prêt";
   } catch (error) {
-    status.textContent = knowledgePairs.length ? "Base française disponible" : "Modèle indisponible";
-    modelState.textContent = knowledgePairs.length ? "Base de connaissances prête" : "En attente du modèle";
-    if (knowledgePairs.length) {
+    status.textContent = knowledgeEngine.size ? "Base française disponible" : "Modèle indisponible";
+    modelState.textContent = knowledgeEngine.size ? "Base de connaissances prête" : "En attente du modèle";
+    if (knowledgeEngine.size) {
       $("#prompt").disabled = false;
       $("#chatForm button").disabled = false;
       $("#prompt").placeholder = "Écrivez un message à LoganAI…";
@@ -245,7 +156,7 @@ async function loadModel() {
   }
 }
 $("#chatForm").addEventListener("submit", async (event) => {
-  event.preventDefault(); const input = $("#prompt"), message = input.value.trim(); if (!message || (!session && !knowledgePairs.length)) return;
+  event.preventDefault(); const input = $("#prompt"), message = input.value.trim(); if (!message || (!session && !knowledgeEngine.size)) return;
   input.value = ""; addBubble("user", message);
   const button = $("#chatForm button"); button.disabled = true; button.textContent = "Réflexion…";
   try {
