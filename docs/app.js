@@ -8,7 +8,10 @@ let lastAssistant = "";
 const knowledgeEngine = window.LoganAIKnowledge.createEngine();
 const aiCore = window.LoganAI.createCore({ fallback: unknownAnswer });
 const memoryStore = window.LoganAIMemory.createMemoryStore(readStore, writeStore);
-const neuralEngine = window.LoganAINeural.createEngine({\n  isReady: () => Boolean(session),\n  generate: (message) => generateReply(message)\n});
+const neuralEngine = window.LoganAINeural.createEngine({
+  isReady: () => Boolean(session),
+  generate: (message) => generateReply(message)
+});
 
 function readStore() {
   try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { memories: [], messages: [] }; }
