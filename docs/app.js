@@ -135,14 +135,16 @@ async function generateReply(message) {
   const prefix = "Utilisateur : " + message.trim() + "\nLoganAI :";
   const ids = bytesToIds(prefix).slice(-512);
   const generated = [];
-  for (let step = 0; step < 80; step++) {
+  for (let step = 0; step < 240; step++) {
     const context = ids.slice(-512);
     const input = new ort.Tensor("int64", BigInt64Array.from(context, (v) => BigInt(v)), [1, context.length]);
     const result = await session.run({input_ids: input});
     const logitsTensor = result.logits;
     const offset = (context.length - 1) * 256;
     const logits = logitsTensor.data.slice(offset, offset + 256);
-    const next = softmaxSample(logits);
+    // Décodage glouton : évite l'aléatoire qui dégrade fortement les sorties d'un petit modèle.
+    let next = 0;
+    for (let i = 1; i < logits.length; i++) if (logits[i] > logits[next]) next = i;
     generated.push(next); ids.push(next);
     if (next === 10 && generated.length > 12) break;
   }
