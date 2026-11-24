@@ -15,7 +15,7 @@ function showPanel(name) {
   document.querySelectorAll(".panel").forEach((el) => el.classList.remove("visible"));
   $("#" + name + "Panel").classList.add("visible");
   document.querySelectorAll(".nav").forEach((el) => el.classList.toggle("active", el.dataset.panel === name));
-  $("#heading").textContent = { chat: "Discussion", memory: "Mémoire", about: "À propos" }[name];
+  $("#heading").textContent = { chat: "Discussion", memory: "Mémoire", about: "À propos", learning: "Auto-apprentissage" }[name];
 }
 document.querySelectorAll(".nav").forEach((button) => button.addEventListener("click", () => showPanel(button.dataset.panel)));
 
@@ -121,6 +121,7 @@ async function loadKnowledge() {
       question = null;
     }
   }
+  if (window.LoganSelfLearning) window.LoganSelfLearning.init(knowledgePairs, readStore, writeStore, (items) => {\n    for (const item of items) knowledgePairs.push({question: item.question, answer: item.answer, words: normalizeWords(item.question)});\n  });
 }
 function findKnowledgeAnswer(message) {
   const conversational = conversationalAnswer(message);
