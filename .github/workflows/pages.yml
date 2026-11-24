@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Check browser JavaScript syntax
         run: node --check docs/app.js
-      - name: Test hybrid engines
+      - name: Test hybrid engines and conversational quality
         run: |
           node --check docs/core/orchestrator.js
           node --check docs/core/conversation-engine.js
@@ -48,7 +48,7 @@ jobs:
           node --check docs/core/memory-engine.js
           node --check docs/core/neural-engine.js
           node --check docs/app.js
-          node --test tests/orchestrator.test.cjs tests/engines.test.cjs tests/memory-engine.test.cjs tests/neural-engine.test.cjs
+          node --test tests/orchestrator.test.cjs tests/engines.test.cjs tests/memory-engine.test.cjs tests/neural-engine.test.cjs tests/conversation-quality.test.cjs
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
