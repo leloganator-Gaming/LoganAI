@@ -43,8 +43,9 @@ jobs:
           node --check docs/core/orchestrator.js
           node --check docs/core/conversation-engine.js
           node --check docs/core/knowledge-engine.js
+          node --check docs/core/memory-engine.js
           node --check docs/app.js
-          node --test tests/orchestrator.test.cjs tests/engines.test.cjs
+          node --test tests/orchestrator.test.cjs tests/engines.test.cjs tests/memory-engine.test.cjs
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
