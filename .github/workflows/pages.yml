@@ -45,7 +45,8 @@ jobs:
           node --check docs/core/orchestrator.js
           node --check docs/core/conversation-engine.js
           node --check docs/core/knowledge-engine.js
-          node --check docs/core/memory-engine.js\n          node --check docs/core/neural-engine.js
+          node --check docs/core/memory-engine.js
+          node --check docs/core/neural-engine.js
           node --check docs/app.js
           node --test tests/orchestrator.test.cjs tests/engines.test.cjs tests/memory-engine.test.cjs tests/neural-engine.test.cjs
       - name: Set up Python
