@@ -38,10 +38,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Check browser JavaScript syntax
         run: node --check docs/app.js
-      - name: Test hybrid orchestration core
+      - name: Test hybrid engines
         run: |
           node --check docs/core/orchestrator.js
-          node --test tests/orchestrator.test.cjs
+          node --check docs/core/conversation-engine.js
+          node --check docs/core/knowledge-engine.js
+          node --check docs/app.js
+          node --test tests/orchestrator.test.cjs tests/engines.test.cjs
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
