@@ -5,6 +5,7 @@ const decoder = new TextDecoder("utf-8");
 let session = null;
 let lastAssistant = "";
 let knowledgePairs = [];
+const aiCore = window.LoganAI.createCore({ fallback: unknownAnswer });
 
 function readStore() {
   try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { memories: [], messages: [] }; }
@@ -165,6 +166,9 @@ function findKnowledgeAnswer(message) {
   return best.answer;
 }
 
+aiCore.registerEngine("conversation", ({ message }) => conversationalAnswer(message), 100);
+aiCore.registerEngine("knowledge", ({ message }) => findKnowledgeAnswer(message), 50);
+
 function bytesToIds(text) { return Array.from(encoder.encode(text)); }
 function softmaxSample(logits, temperature = 0.68, topK = 24) {
   const candidates = Array.from(logits, (value, id) => ({id, value: value / temperature}))
@@ -245,8 +249,8 @@ $("#chatForm").addEventListener("submit", async (event) => {
   input.value = ""; addBubble("user", message);
   const button = $("#chatForm button"); button.disabled = true; button.textContent = "Réflexion…";
   try {
-    const knownAnswer = findKnowledgeAnswer(message);
-    addBubble("assistant", knownAnswer || unknownAnswer());
+    const result = await aiCore.respond({ message }, { memories: readStore().memories });
+    addBubble("assistant", result.text);
   }
   catch (error) { addBubble("assistant", "Erreur du moteur : " + error.message); }
   finally { button.disabled = false; button.textContent = "Envoyer ↑"; input.focus(); }
