@@ -112,14 +112,17 @@ function softmaxSample(logits, temperature = 0.68, topK = 24) {
   return candidates[0].id;
 }
 function isReadableFrench(text) {
-  if (!text || text.includes("\uFFFD")) return false;
-  const words = text.match(/[A-Za-zÀ-ÖØ-öø-ÿ]{2,}/g) || [];
-  if (words.length < 3) return false;
-  const letters = (text.match(/[A-Za-zÀ-ÖØ-öø-ÿ]/g) || []).length;
-  const vowels = (text.match(/[aeiouyàâäéèêëïîôöùûüÿ]/gi) || []).length;
-  if (!letters || vowels / letters < 0.22 || vowels / letters > 0.68) return false;
-  if (/(.)\\1{4,}/i.test(text)) return false;
-  return true;
+  if (typeof text !== "string" || !text.trim() || text.includes("\uFFFD")) return false;
+  const words = text.toLocaleLowerCase("fr").match(/[a-zàâçéèêëîïôùûüÿœæ]{2,}/g) || [];
+  if (words.length < 4 || words.length > 55) return false;
+  if (/(.)\\1{4,}/iu.test(text)) return false;
+  // Garde conservatrice : le modèle byte-level doit produire suffisamment de mots
+  // français fréquents, pas seulement une suite de caractères avec des voyelles.
+  const common = new Set(("à au aux avec ce ceci cela ces cette ceux chaque comme dans de des du elle elles en et eux il ils je la le les leur lui ma mais me même mes moi mon ne nos notre nous on ou par pas pour pourquoi quand que qui quoi sa sans se ses si son sous sur ta te tes toi ton tu un une vos votre vous y est sont être avoir faire fait peut peux doit doit être suis avez avons ont été était donc très bien bonjour merci comment quel quelle quels quelles où").split(" "));
+  const known = words.filter(word => common.has(word) || word.length >= 7 && /(?:tion|ment|ique|able|iste|isme|eur|euse|ées|és|ée|er|ir|re)$/.test(word));
+  const ratio = known.length / words.length;
+  const functionWords = words.filter(word => common.has(word)).length;
+  return ratio >= 0.58 && functionWords >= 2;
 }
 function unknownAnswer() {
   return "Je n'ai pas encore appris à répondre correctement à cette question. Je peux déjà traiter plusieurs sujets comme le français, les sciences, les mathématiques et l'informatique. Essayez de préciser votre demande.";
