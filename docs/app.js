@@ -121,7 +121,9 @@ async function loadKnowledge() {
       question = null;
     }
   }
-  if (window.LoganSelfLearning) window.LoganSelfLearning.init(knowledgePairs, readStore, writeStore, (items) => {\n    for (const item of items) knowledgePairs.push({question: item.question, answer: item.answer, words: normalizeWords(item.question)});\n  });
+  if (window.LoganSelfLearning) window.LoganSelfLearning.init(knowledgePairs, readStore, writeStore, (items) => {
+    for (const item of items) knowledgePairs.push({question: item.question, answer: item.answer, words: normalizeWords(item.question)});
+  });
 }
 function findKnowledgeAnswer(message) {
   const conversational = conversationalAnswer(message);
