@@ -6,11 +6,11 @@
   "use strict";
 
   function isReadableFrench(text) {
-    if (typeof text !== "string" || !text.trim() || text.includes("\\uFFFD")) return false;
+    if (typeof text !== "string" || !text.trim() || text.includes("\uFFFD")) return false;
     const words = text.toLocaleLowerCase("fr").match(/[a-zàâçéèêëîïôùûüÿœæ]{2,}/g) || [];
     if (words.length < 4 || words.length > 55) return false;
-    if (/(.)\\1{4,}/iu.test(text)) return false;
-    if (/\\b(\\p{L}{2,})\\s+\\1(?:\\s+\\1)+\\b/iu.test(text)) return false;
+    if (/(.)\1{4,}/iu.test(text)) return false;
+    if (/\b(\p{L}{2,})\s+\1(?:\s+\1)+\b/iu.test(text)) return false;
     const counts = new Map();
     for (const word of words) counts.set(word, (counts.get(word) || 0) + 1);
     if (Math.max(...counts.values()) >= 4) return false;
@@ -19,7 +19,6 @@
     const known = words.filter(word => common.has(word) || word.length >= 7 && /(?:tion|ment|ique|able|iste|isme|eur|euse|ées|és|ée|er|ir|re)$/.test(word));
     return commonCount >= 2 && known.length / words.length >= 0.58;
   }
-
   function createEngine(options = {}) {
     if (typeof options.generate !== "function") {
       throw new TypeError("La fonction de génération neuronale est obligatoire.");
