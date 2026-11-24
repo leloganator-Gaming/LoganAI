@@ -6,13 +6,13 @@
   "use strict";
   const TYPES = new Set(["preference", "note"]);
   const SENSITIVE = [
-    /\\b(?:mot de passe|password|code secret|secret|clé api|api key|token privé)\\b/i,
-    /\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b/i,
-    /(?:\\+?\\d[\\d .()-]{7,}\\d)/,
-    /\\b(?:adresse|domicile|j'habite au|je vis au)\\b/i,
-    /\\b(?:diagnostic|traitement médical|dossier médical|numéro de sécurité sociale)\\b/i
+    /\b(?:mot de passe|password|code secret|secret|clé api|api key|token privé)\b/i,
+    /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
+    /(?:\+?\d[\d .()-]{7,}\d)/,
+    /\b(?:adresse|domicile|j'habite au|je vis au)\b/i,
+    /\b(?:diagnostic|traitement médical|dossier médical|numéro de sécurité sociale)\b/i
   ];
-  const clean = (value) => typeof value === "string" ? value.trim().replace(/\\s+/g, " ") : "";
+  const clean = (value) => typeof value === "string" ? value.trim().replace(/\s+/g, " ") : "";
   function isSafeText(value) {
     const text = clean(value);
     return Boolean(text) && text.length <= 500 && !SENSITIVE.some((pattern) => pattern.test(text));
