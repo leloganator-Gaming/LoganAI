@@ -100,3 +100,14 @@ def test_personal_memory_is_not_injected_into_neural_prompts_automatically():
     assert "const prefix = \"Utilisateur : \" + message.trim()" in generation
     assert "readStore().memories" not in generation
     assert "Informations mémorisées" not in generation
+
+
+def test_neural_engine_is_registered_after_known_answers():
+    html = (DOCS / "index.html").read_text(encoding="utf-8")
+    app = (DOCS / "app.js").read_text(encoding="utf-8")
+    assert 'src="./core/neural-engine.js"' in html
+    assert 'window.LoganAINeural.createEngine' in app
+    assert 'registerEngine("neural"' in app
+    assert 'registerEngine("knowledge"' in app
+    assert 'registerEngine("neural", ({ message }) => neuralEngine.respond(message), 10)' in app
+    assert "return isReadableFrench(answer) ? answer : null;" in app
