@@ -10,7 +10,8 @@ const aiCore = window.LoganAI.createCore({ fallback: unknownAnswer });
 const memoryStore = window.LoganAIMemory.createMemoryStore(readStore, writeStore);
 const neuralEngine = window.LoganAINeural.createEngine({
   isReady: () => Boolean(session),
-  generate: (message) => generateReply(message)
+  generate: (message) => generateReply(message),
+  validate: isReadableFrench
 });
 
 function readStore() {
