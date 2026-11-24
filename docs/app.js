@@ -7,6 +7,7 @@ let session = null;
 let lastAssistant = "";
 const knowledgeEngine = window.LoganAIKnowledge.createEngine();
 const aiCore = window.LoganAI.createCore({ fallback: unknownAnswer });
+const memoryStore = window.LoganAIMemory.createMemoryStore(readStore, writeStore);
 
 function readStore() {
   try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { memories: [], messages: [] }; }
@@ -41,20 +42,32 @@ function renderHistory() {
 }
 function renderMemories() {
   const root = $("#memoryList"); root.replaceChildren();
-  readStore().memories.forEach((memory, index) => {
+  for (const memory of memoryStore.list()) {
     const row = document.createElement("div"); row.className = "memory-item";
-    const text = document.createElement("span"); text.textContent = memory;
+    const content = document.createElement("span");
+    content.textContent = (memory.type === "preference" ? "Préférence · " : "Note · ") + memory.text;
     const remove = document.createElement("button"); remove.textContent = "Supprimer";
-    remove.addEventListener("click", () => {
-      const data = readStore(); data.memories.splice(index, 1); writeStore(data); renderMemories();
-    });
-    row.append(text, remove); root.append(row);
-  });
+    remove.addEventListener("click", () => { memoryStore.remove(memory.id); renderMemories(); });
+    row.append(content, remove); root.append(row);
+  }
+  $("#memoryCount").textContent = memoryStore.list().length + " élément(s) enregistré(s) sur cet appareil.";
 }
 $("#memoryForm").addEventListener("submit", (event) => {
-  event.preventDefault(); const value = $("#memoryText").value.trim(); if (!value) return;
-  const data = readStore(); data.memories.push(value); writeStore(data);
-  $("#memoryText").value = ""; renderMemories();
+  event.preventDefault();
+  const saved = memoryStore.add($("#memoryType").value, $("#memoryText").value.trim());
+  if (!saved) {
+    $("#memoryFeedback").textContent = "Texte refusé : vérifiez sa longueur et n'enregistrez aucune donnée sensible.";
+    return;
+  }
+  $("#memoryText").value = "";
+  $("#memoryFeedback").textContent = "Élément enregistré localement.";
+  renderMemories();
+});
+$("#clearMemory").addEventListener("click", () => {
+  if (!memoryStore.list().length) return;
+  memoryStore.clear();
+  $("#memoryFeedback").textContent = "La mémoire personnelle locale a été effacée.";
+  renderMemories();
 });
 
 async function loadKnowledge() {
@@ -79,6 +92,7 @@ async function loadKnowledge() {
 }
 
 aiCore.registerEngine("conversation", ({ message }) => window.LoganAIConversation.respond(message), 100);
+aiCore.registerEngine("memory", ({ message }) => memoryStore.respond(message), 80);
 aiCore.registerEngine("knowledge", ({ message }) => knowledgeEngine.respond(message), 50);
 
 function bytesToIds(text) { return Array.from(encoder.encode(text)); }
