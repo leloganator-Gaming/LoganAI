@@ -31,3 +31,28 @@ test("le moteur de connaissances refuse une question ambiguë ou inconnue", () =
   assert.equal(engine.addPairs([{question:"Qu'est-ce qu'un réseau ?",answer:"Un ensemble d'appareils."}]), 1);
   assert.equal(engine.size, 2);
 });
+
+
+const WebSynthesis = require("../docs/core/web-synthesis.js");
+
+test("la synthèse maison sélectionne les phrases liées à la question et cite les sources", () => {
+  const result = WebSynthesis.synthesize("Comment fonctionne le moteur solaire ?", [
+    {title:"Énergie solaire",summary:"Les panneaux solaires convertissent la lumière du soleil en électricité grâce à des cellules photovoltaïques. Cette technologie est utilisée dans de nombreux bâtiments."},
+    {title:"Énergie éolienne",summary:"Les éoliennes utilisent le vent pour produire de l'électricité dans les réseaux locaux."}
+  ]);
+  assert.match(result, /panneaux solaires/i);
+  assert.match(result, /\[1\]/);
+  assert.doesNotMatch(result, /éoliennes/i);
+});
+
+test("la synthèse maison écarte les phrases répétées", () => {
+  const result = WebSynthesis.synthesize("ordinateur et processeur", [
+    {summary:"Un ordinateur utilise un processeur pour exécuter des instructions et traiter les données."},
+    {summary:"Un ordinateur utilise un processeur pour exécuter des instructions et traiter les données."}
+  ]);
+  assert.equal((result.match(/ordinateur utilise/g) || []).length, 1);
+});
+
+test("la synthèse maison gère les résultats vides", () => {
+  assert.equal(WebSynthesis.synthesize("question", []), null);
+});
