@@ -50,7 +50,7 @@ def test_french_corpus_is_expanded_and_published_for_retrieval():
     assert "Bonjour" in corpus
     workflow = (ROOT / ".github" / "workflows" / "pages.yml").read_text(encoding="utf-8")
     assert "cp data/train_corpus.txt docs/knowledge.txt" in workflow
-    assert "--steps 800" in workflow
+    assert "--steps 2400" in workflow
 
 
 def test_browser_prefers_known_french_answers_before_neural_generation():
