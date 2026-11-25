@@ -48,6 +48,9 @@
     for (const item of candidates) {
       if (chosen.length >= limit) break;
       const duplicate = chosen.some(old => {
+        const itemNumbers = (item.sentence.match(/\b\d+(?:[.,]\d+)?\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\b/g) || []).join("|");
+        const oldNumbers = (old.sentence.match(/\b\d+(?:[.,]\d+)?\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\b/g) || []).join("|");
+        if (itemNumbers && oldNumbers && itemNumbers !== oldNumbers) return false;
         const overlap = [...item.terms].filter(w => old.terms.has(w)).length;
         return overlap / Math.max(1, Math.min(item.terms.size, old.terms.size)) > 0.78;
       });
@@ -61,7 +64,7 @@
       const normalized = item.sentence.toLowerCase();
       const numbers = normalized.match(/\b\d+(?:[.,]\d+)?\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\b/g) || [];
       for (const number of numbers) {
-        const key = words(normalized).map(stem).filter(w => w.length > 3).slice(0,4).sort().join("|");
+        const key = words(normalized).filter(w => !/^\d/.test(w)).map(stem).filter(w => w.length > 3).sort().join("|");
         if (!key) continue;
         if (!groups.has(key)) groups.set(key, new Set());
         groups.get(key).add(number.replace(/\s/g,""));
@@ -81,7 +84,11 @@
       }).filter(Boolean);
       return fallback.length ? "Les sources disponibles ne permettent pas une réponse suffisamment précise. Voici les informations trouvées :\n" + fallback.join("\n") : null;
     }
-    return chosen.map(item => item.sentence + " [" + item.source + "]").join("\n\n");
+    const answer = chosen.map(item => item.sentence + " [" + item.source + "]").join("\n\n");
+    if (detectDisagreement(chosen)) {
+      return answer + "\n\nAttention : les sources présentent des valeurs numériques différentes. Vérifiez les chiffres dans les pages citées avant de les retenir.";
+    }
+    return answer;
   }
   return Object.freeze({
     synthesize, detectIntent, rankSentences, removeRedundancy, detectDisagreement,
