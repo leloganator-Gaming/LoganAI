@@ -63,12 +63,12 @@
       for (let j = i + 1; j < chosen.length; j++) {
         const left = chosen[i].sentence.toLowerCase();
         const right = chosen[j].sentence.toLowerCase();
-        const leftNumbers = left.match(/\\b\\d+(?:[.,]\\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\\b/g) || [];
-        const rightNumbers = right.match(/\\b\\d+(?:[.,]\\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\\b/g) || [];
+        const leftNumbers = left.match(/\b\d+(?:[.,]\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\b/g) || [];
+        const rightNumbers = right.match(/\b\d+(?:[.,]\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\b/g) || [];
         if (!leftNumbers.length || !rightNumbers.length) continue;
         if (leftNumbers.join("|") === rightNumbers.join("|")) continue;
-        const leftTerms = new Set(words(left).filter(w => !/^\\d/.test(w)).map(stem));
-        const rightTerms = new Set(words(right).filter(w => !/^\\d/.test(w)).map(stem));
+        const leftTerms = new Set(words(left).filter(w => !/^\d/.test(w)).map(stem));
+        const rightTerms = new Set(words(right).filter(w => !/^\d/.test(w)).map(stem));
         const overlap = [...leftTerms].filter(w => rightTerms.has(w)).length;
         const similarity = overlap / Math.max(1, Math.min(leftTerms.size, rightTerms.size));
         if (similarity >= 0.55) return true;
