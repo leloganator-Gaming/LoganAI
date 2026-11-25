@@ -112,10 +112,11 @@ aiCore.registerEngine("web-search", async ({ message }) => {
     const sources = data.results.slice(0, 5).map((item, index) =>
       (index + 1) + ". " + item.title + " [" + (item.contentExtracted ? "page analysée" : "extrait moteur") + "]\n" + item.url
     );
-    const summary = typeof data.summary === "string" && data.summary.trim()
-      ? data.summary.trim()
-      : "Les pages trouvées n'ont pas fourni assez de texte exploitable pour une synthèse.";
-    return "Voici une synthèse de ma recherche Web (" + data.provider + ") :\n\n" + summary
+    const summary = window.LoganAIWebSynthesis
+      ? window.LoganAIWebSynthesis.synthesize(message, data.results)
+      : (typeof data.summary === "string" ? data.summary.trim() : "");
+    if (!summary) return null;
+    return "Synthèse réalisée par le moteur maison LoganAI (" + data.provider + ") :\n\n" + summary
       + "\n\nSources :\n" + sources.join("\n\n")
       + "\n\nLa synthèse est automatique et peut être incomplète. Consultez les sources pour vérifier les détails.";
   } catch (error) {
