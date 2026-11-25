@@ -9,13 +9,13 @@
     return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
       .match(/[a-z0-9]{3,}/g)?.filter(w => !STOP.has(w)) || [];
   }
-  function sentences(value) {
+  function stem(word) {\n    return word.replace(/(issements|issement|atrices|ateurs|ations|ation|ements|ement|iques|ique|istes|iste|ées|es|s)$/,"");\n  }\n  function sentences(value) {
     return String(value || "").replace(/\s+/g," ").split(/(?<=[.!?])\s+/)
       .map(s => s.trim()).filter(s => s.length >= 45 && s.length <= 420);
   }
   function synthesize(query, results, limit = 5) {
     if (!Array.isArray(results) || !results.length) return null;
-    const queryTerms = [...new Set(words(query))];
+    const queryTerms = [...new Set(words(query).map(stem))];
     const candidates = [];
     results.slice(0, 5).forEach((item, index) => {
       const source = index + 1;
@@ -26,7 +26,7 @@
         const key = normalized.replace(/[^a-z0-9]/g,"");
         if (seen.has(key)) continue;
         seen.add(key);
-        const terms = words(sentence);
+        const terms = words(sentence).map(stem);
         const hits = queryTerms.filter(term => terms.includes(term)).length;
         const coverage = hits / Math.max(1, queryTerms.length);
         const density = hits / Math.max(1, terms.length);
