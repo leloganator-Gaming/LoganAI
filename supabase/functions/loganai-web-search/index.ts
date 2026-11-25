@@ -52,18 +52,18 @@ Deno.serve(async (req: Request) => {
     if (!response.ok) return json({ error: "Le moteur de recherche est momentanément indisponible." }, 502);
     const html = (await response.text()).slice(0, 1_500_000);
     const results: Array<{ title: string; url: string; snippet: string }> = [];
-    const anchors = [...html.matchAll(/<a\\b([^>]*)>([\\s\\S]*?)<\\/a>/gi)];
+    const anchors = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
     for (let i = 0; i < anchors.length; i++) {
       const attrs = anchors[i][1];
-      const classes = attrs.match(/\\bclass\\s*=\\s*(["'])(.*?)\\1/i)?.[2] || "";
-      if (!classes.split(/\\s+/).includes("result__a")) continue;
-      const href = attrs.match(/\\bhref\\s*=\\s*(["'])(.*?)\\1/i)?.[2] || "";
+      const classes = attrs.match(/\bclass\s*=\s*(["'])(.*?)\1/i)?.[2] || "";
+      if (!classes.split(/\s+/).includes("result__a")) continue;
+      const href = attrs.match(/\bhref\s*=\s*(["'])(.*?)\1/i)?.[2] || "";
       const url = decodeUrl(href);
-      if (!url || !/^https?:\\/\\//i.test(url) || new URL(url).hostname.endsWith("duckduckgo.com")) continue;
-      const nextAnchor = anchors.slice(i + 1).find((item) => (item[1].match(/\\bclass\\s*=\\s*(["'])(.*?)\\1/i)?.[2] || "").split(/\\s+/).includes("result__a"));
+      if (!url || !/^https?:\/\//i.test(url) || new URL(url).hostname.endsWith("duckduckgo.com")) continue;
+      const nextAnchor = anchors.slice(i + 1).find((item) => (item[1].match(/\bclass\s*=\s*(["'])(.*?)\1/i)?.[2] || "").split(/\s+/).includes("result__a"));
       const sectionEnd = nextAnchor ? html.indexOf(nextAnchor[0], anchors[i].index! + anchors[i][0].length) : html.length;
       const section = html.slice(anchors[i].index! + anchors[i][0].length, sectionEnd);
-      const snippetMatch = section.match(/class=["'][^"']*result__snippet[^"']*["'][^>]*>([\\s\\S]*?)<\\/[^>]+>/i);
+      const snippetMatch = section.match(/class=["'][^"']*result__snippet[^"']*["'][^>]*>([\s\S]*?)<\/[^>]+>/i);
       const title = clean(anchors[i][2]);
       if (!title) continue;
       results.push({ title: title.slice(0, 180), url, snippet: clean(snippetMatch?.[1] || "").slice(0, 420) });
