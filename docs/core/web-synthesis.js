@@ -59,18 +59,22 @@
     return chosen;
   }
   function detectDisagreement(chosen) {
-    const groups = new Map();
-    for (const item of chosen) {
-      const normalized = item.sentence.toLowerCase();
-      const numbers = normalized.match(/\b\d+(?:[.,]\d+)?\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\b/g) || [];
-      for (const number of numbers) {
-        const key = words(normalized).filter(w => !/^\d/.test(w)).map(stem).filter(w => w.length > 3).sort().join("|");
-        if (!key) continue;
-        if (!groups.has(key)) groups.set(key, new Set());
-        groups.get(key).add(number.replace(/\s/g,""));
+    for (let i = 0; i < chosen.length; i++) {
+      for (let j = i + 1; j < chosen.length; j++) {
+        const left = chosen[i].sentence.toLowerCase();
+        const right = chosen[j].sentence.toLowerCase();
+        const leftNumbers = left.match(/\\b\\d+(?:[.,]\\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\\b/g) || [];
+        const rightNumbers = right.match(/\\b\\d+(?:[.,]\\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\\b/g) || [];
+        if (!leftNumbers.length || !rightNumbers.length) continue;
+        if (leftNumbers.join("|") === rightNumbers.join("|")) continue;
+        const leftTerms = new Set(words(left).filter(w => !/^\\d/.test(w)).map(stem));
+        const rightTerms = new Set(words(right).filter(w => !/^\\d/.test(w)).map(stem));
+        const overlap = [...leftTerms].filter(w => rightTerms.has(w)).length;
+        const similarity = overlap / Math.max(1, Math.min(leftTerms.size, rightTerms.size));
+        if (similarity >= 0.55) return true;
       }
     }
-    return [...groups.values()].some(values => values.size > 1);
+    return false;
   }
   function synthesize(query, results, limit = 5) {
     if (!Array.isArray(results) || !results.length) return null;
