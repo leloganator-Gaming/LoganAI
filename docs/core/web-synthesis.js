@@ -15,28 +15,34 @@
     return String(value || "").replace(/\s+/g," ").split(/(?<=[.!?])\s+/)
       .map(s => s.trim()).filter(s => s.length >= 45 && s.length <= 420);
   }
-  function synthesize(query, results, limit = 5) {
-    if (!Array.isArray(results) || !results.length) return null;
+
+  function detectIntent(query) {
+    const q = String(query || "").toLowerCase();
+    if (/\\b(quand|date|année|heure|depuis)\\b/.test(q)) return "temporal";
+    if (/\\b(combien|prix|coût|pourcentage|nombre|chiffre)\\b/.test(q)) return "quantitative";
+    if (/\\b(compare|différence|versus|contre)\\b/.test(q)) return "comparison";
+    if (/\\b(pourquoi|cause|raison)\\b/.test(q)) return "causal";
+    return "general";
+  }
+  function rankSentences(query, results) {
     const queryTerms = [...new Set(words(query).map(stem))];
     const candidates = [];
     results.slice(0, 5).forEach((item, index) => {
       const source = index + 1;
       const text = [item.pageTitle || item.title, item.summary, item.snippet].filter(Boolean).join(". ");
-      const seen = new Set();
       for (const sentence of sentences(text)) {
-        const normalized = sentence.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-        const key = normalized.replace(/[^a-z0-9]/g,"");
-        if (seen.has(key)) continue;
-        seen.add(key);
         const terms = words(sentence).map(stem);
         const hits = queryTerms.filter(term => terms.includes(term)).length;
+        if (!hits) continue;
         const coverage = hits / Math.max(1, queryTerms.length);
         const density = hits / Math.max(1, terms.length);
         const score = coverage * 0.72 + density * 0.18 + Math.min(sentence.length,240)/2400;
-        if (hits > 0) candidates.push({ sentence, source, score, terms: new Set(terms) });
+        candidates.push({ sentence, source, score, terms: new Set(terms) });
       }
     });
-    candidates.sort((a,b) => b.score-a.score);
+    return candidates.sort((a,b) => b.score-a.score);
+  }
+  function removeRedundancy(candidates, limit) {
     const chosen = [];
     for (const item of candidates) {
       if (chosen.length >= limit) break;
@@ -46,6 +52,27 @@
       });
       if (!duplicate) chosen.push(item);
     }
+    return chosen;
+  }
+  function detectDisagreement(chosen) {
+    const groups = new Map();
+    for (const item of chosen) {
+      const normalized = item.sentence.toLowerCase();
+      const numbers = normalized.match(/\\b\\d+(?:[.,]\\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\\b/g) || [];
+      for (const number of numbers) {
+        const key = words(normalized).map(stem).filter(w => w.length > 3).slice(0,4).sort().join("|");
+        if (!key) continue;
+        if (!groups.has(key)) groups.set(key, new Set());
+        groups.get(key).add(number.replace(/\\s/g,""));
+      }
+    }
+    return [...groups.values()].some(values => values.size > 1);
+  }
+  function synthesize(query, results, limit = 5) {
+    if (!Array.isArray(results) || !results.length) return null;
+    const intent = detectIntent(query);
+    const candidates = rankSentences(query, results);
+    const chosen = removeRedundancy(candidates, limit);
     if (!chosen.length) {
       const fallback = results.slice(0,3).map((item,i) => {
         const text = String(item.summary || item.snippet || "").trim();
@@ -55,5 +82,8 @@
     }
     return chosen.map(item => item.sentence + " [" + item.source + "]").join("\n\n");
   }
-  return Object.freeze({ synthesize, version: "1.0.0" });
+  return Object.freeze({
+    synthesize, detectIntent, rankSentences, removeRedundancy, detectDisagreement,
+    version: "1.1.0"
+  });
 });
