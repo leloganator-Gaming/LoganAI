@@ -56,3 +56,18 @@ test("la synthèse maison écarte les phrases répétées", () => {
 test("la synthèse maison gère les résultats vides", () => {
   assert.equal(WebSynthesis.synthesize("question", []), null);
 });
+
+test("le classificateur détecte les intentions temporelles, quantitatives et comparatives", () => {
+  assert.equal(WebSynthesis.detectIntent("Quand cette technologie a-t-elle été créée ?"), "temporal");
+  assert.equal(WebSynthesis.detectIntent("Combien coûte ce service ?"), "quantitative");
+  assert.equal(WebSynthesis.detectIntent("Quelle est la différence entre ces modèles ?"), "comparison");
+  assert.equal(WebSynthesis.detectIntent("Pourquoi ce système fonctionne ?"), "causal");
+});
+
+test("le détecteur signale des valeurs numériques divergentes", () => {
+  const chosen = [
+    {sentence:"Le service compte 120 utilisateurs actifs chaque mois.", terms:new Set(["service","compte","120","utilisateurs","actifs","chaque","mois"])},
+    {sentence:"Le service compte 150 utilisateurs actifs chaque mois.", terms:new Set(["service","compte","150","utilisateurs","actifs","chaque","mois"])}
+  ];
+  assert.equal(WebSynthesis.detectDisagreement(chosen), true);
+});
