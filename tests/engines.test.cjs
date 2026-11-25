@@ -71,3 +71,13 @@ test("le détecteur signale des valeurs numériques divergentes", () => {
   ];
   assert.equal(WebSynthesis.detectDisagreement(chosen), true);
 });
+
+test("la synthèse conserve les chiffres contradictoires et avertit le lecteur", () => {
+  const result = WebSynthesis.synthesize("Combien d'utilisateurs actifs compte le service ?", [
+    {summary:"Le service compte 120 utilisateurs actifs chaque mois selon le rapport publié."},
+    {summary:"Le service compte 150 utilisateurs actifs chaque mois selon une autre estimation."}
+  ]);
+  assert.match(result, /120/);
+  assert.match(result, /150/);
+  assert.match(result, /valeurs numériques différentes/i);
+});
