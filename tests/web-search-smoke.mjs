@@ -11,7 +11,7 @@ if (!Array.isArray(data.results) || data.results.length === 0) {
   throw new Error("Le moteur a répondu, mais aucun résultat exploitable n'a été extrait.");
 }
 for (const result of data.results) {
-  if (!result.title || !/^https?:\\/\\//.test(result.url)) throw new Error("Résultat mal formé.");
+  if (!result.title || !/^https?:\/\//.test(result.url)) throw new Error("Résultat mal formé.");
 }
 console.log(`Recherche Web OK : ${data.results.length} résultat(s), fournisseur ${data.provider}.`);
 console.log(data.results.map((r) => `- ${r.title} — ${r.url}`).join("\n"));
