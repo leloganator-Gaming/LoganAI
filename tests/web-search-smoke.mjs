@@ -2,7 +2,7 @@ const endpoint = "https://bphfjhmmfwsnjnbnjkjl.supabase.co/functions/v1/loganai-
 const response = await fetch(endpoint, {
   method: "POST",
   headers: { "Content-Type": "application/json", "Origin": "https://leloganator-gaming.github.io" },
-  body: JSON.stringify({ query: "intelligence artificielle définition" }),
+  body: JSON.stringify({ query: "Artificial intelligence Wikipedia" }),
   signal: AbortSignal.timeout(15000)
 });
 if (!response.ok) throw new Error(`Web search HTTP ${response.status}: ${await response.text()}`);
@@ -12,6 +12,12 @@ if (!Array.isArray(data.results) || data.results.length === 0) {
 }
 if (!data.results.some((item) => /intelligence|artificial/i.test(`${item.title} ${item.snippet}`))) {
   throw new Error("Les résultats reçus ne semblent pas correspondre à la requête.");
+}
+if (typeof data.summary !== "string" || data.summary.length < 80) {
+  throw new Error("La synthèse des pages Web est absente ou trop courte.");
+}
+if (!data.results.some((item) => item.contentExtracted && item.summary?.length > 80)) {
+  throw new Error("Aucune page source n'a pu être récupérée et analysée.");
 }
 for (const result of data.results) {
   if (!result.title || !/^https?:\/\//.test(result.url)) throw new Error("Résultat mal formé.");
