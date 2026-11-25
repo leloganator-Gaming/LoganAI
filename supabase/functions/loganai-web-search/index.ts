@@ -45,32 +45,24 @@ Deno.serve(async (req: Request) => {
     const query = typeof body?.query === "string" ? body.query.trim().slice(0, 300) : "";
     if (query.length < 3) return json({ error: "La recherche doit contenir au moins 3 caractères." }, 400);
     if (isRestrictedQuery(query)) return json({ error: "Cette recherche n'est pas disponible dans LoganAI." }, 403);
-    const response = await fetch("https://html.duckduckgo.com/html/?q=" + encodeURIComponent(query), {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; LoganAI/1.0; +https://leloganator-gaming.github.io/LoganAI/)", "Accept": "text/html" },
+    const response = await fetch("https://www.bing.com/search?format=rss&q=" + encodeURIComponent(query), {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; LoganAI/1.0)", "Accept": "application/rss+xml, application/xml, text/xml" },
       signal: AbortSignal.timeout(8_000),
     });
     if (!response.ok) return json({ error: "Le moteur de recherche est momentanément indisponible." }, 502);
-    const html = (await response.text()).slice(0, 1_500_000);
+    const xml = (await response.text()).slice(0, 1_500_000);
     const results: Array<{ title: string; url: string; snippet: string }> = [];
-    const anchors = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
-    for (let i = 0; i < anchors.length; i++) {
-      const attrs = anchors[i][1];
-      const classes = attrs.match(/\bclass\s*=\s*(["'])(.*?)\1/i)?.[2] || "";
-      if (!classes.split(/\s+/).includes("result__a")) continue;
-      const href = attrs.match(/\bhref\s*=\s*(["'])(.*?)\1/i)?.[2] || "";
-      const url = decodeUrl(href);
-      if (!url || !/^https?:\/\//i.test(url) || new URL(url).hostname.endsWith("duckduckgo.com")) continue;
-      const nextAnchor = anchors.slice(i + 1).find((item) => (item[1].match(/\bclass\s*=\s*(["'])(.*?)\1/i)?.[2] || "").split(/\s+/).includes("result__a"));
-      const sectionEnd = nextAnchor ? html.indexOf(nextAnchor[0], anchors[i].index! + anchors[i][0].length) : html.length;
-      const section = html.slice(anchors[i].index! + anchors[i][0].length, sectionEnd);
-      const snippetMatch = section.match(/class=["'][^"']*result__snippet[^"']*["'][^>]*>([\s\S]*?)<\/[^>]+>/i);
-      const title = clean(anchors[i][2]);
-      if (!title) continue;
-      results.push({ title: title.slice(0, 180), url, snippet: clean(snippetMatch?.[1] || "").slice(0, 420) });
+    for (const match of xml.matchAll(/<item>([\\s\\S]*?)<\\/item>/gi)) {
+      const item = match[1];
+      const title = clean(item.match(/<title>([\\s\\S]*?)<\\/title>/i)?.[1] || "");
+      const url = decodeUrl(clean(item.match(/<link>([\\s\\S]*?)<\\/link>/i)?.[1] || ""));
+      const snippet = clean(item.match(/<description>([\\s\\S]*?)<\\/description>/i)?.[1] || "");
+      if (!title || !url || !/^https?:\\/\\//i.test(url) || new URL(url).hostname.endsWith("bing.com")) continue;
+      results.push({ title: title.slice(0, 180), url, snippet: snippet.slice(0, 420) });
       if (results.length >= 5) break;
     }
     if (!results.length) return json({ error: "Le moteur de recherche n'a fourni aucun résultat exploitable." }, 502);
-    return json({ query, results, provider: "DuckDuckGo", searchedAt: new Date().toISOString() });
+    return json({ query, results, provider: "Bing", searchedAt: new Date().toISOString() });
   } catch {
     return json({ error: "Impossible d'effectuer la recherche pour le moment." }, 502);
   }
