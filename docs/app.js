@@ -110,9 +110,14 @@ aiCore.registerEngine("web-search", async ({ message }) => {
     const data = await response.json();
     if (!Array.isArray(data.results) || !data.results.length) return null;
     const sources = data.results.slice(0, 5).map((item, index) =>
-      (index + 1) + ". " + item.title + (item.snippet ? "\\n" + item.snippet : "") + "\\n" + item.url
+      (index + 1) + ". " + item.title + " [" + (item.contentExtracted ? "page analysée" : "extrait moteur") + "]\n" + item.url
     );
-    return "Je n'ai pas trouvé de réponse suffisamment fiable dans mes connaissances locales. Voici les résultats de ma recherche Web (" + data.provider + ") :\\n\\n" + sources.join("\\n\\n") + "\\n\\nCes résultats sont des sources à consulter ; leur contenu doit être vérifié.";
+    const summary = typeof data.summary === "string" && data.summary.trim()
+      ? data.summary.trim()
+      : "Les pages trouvées n'ont pas fourni assez de texte exploitable pour une synthèse.";
+    return "Voici une synthèse de ma recherche Web (" + data.provider + ") :\n\n" + summary
+      + "\n\nSources :\n" + sources.join("\n\n")
+      + "\n\nLa synthèse est automatique et peut être incomplète. Consultez les sources pour vérifier les détails.";
   } catch (error) {
     console.warn("Recherche Web indisponible :", error);
     return null;
