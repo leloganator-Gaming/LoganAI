@@ -11,7 +11,8 @@
   }
   function stem(word) {
     return word.replace(/(issements|issement|atrices|ateurs|ations|ation|ements|ement|iques|ique|istes|iste|aires|aire|ées|es|s)$/,"");
-  }\n  function sentences(value) {
+  }
+  function sentences(value) {
     return String(value || "").replace(/\s+/g," ").split(/(?<=[.!?])\s+/)
       .map(s => s.trim()).filter(s => s.length >= 45 && s.length <= 420);
   }
