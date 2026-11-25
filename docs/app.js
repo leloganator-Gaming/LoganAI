@@ -99,6 +99,25 @@ async function loadKnowledge() {
 aiCore.registerEngine("conversation", ({ message }) => window.LoganAIConversation.respond(message), 100);
 aiCore.registerEngine("memory", ({ message }) => memoryStore.respond(message), 80);
 aiCore.registerEngine("knowledge", ({ message }) => knowledgeEngine.respond(message), 50);
+aiCore.registerEngine("web-search", async ({ message }) => {
+  try {
+    const response = await fetch("https://bphfjhmmfwsnjnbnjkjl.supabase.co/functions/v1/loganai-web-search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: message })
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    if (!Array.isArray(data.results) || !data.results.length) return null;
+    const sources = data.results.slice(0, 5).map((item, index) =>
+      (index + 1) + ". " + item.title + (item.snippet ? "\\n" + item.snippet : "") + "\\n" + item.url
+    );
+    return "Je n'ai pas trouvé de réponse suffisamment fiable dans mes connaissances locales. Voici les résultats de ma recherche Web (" + data.provider + ") :\\n\\n" + sources.join("\\n\\n") + "\\n\\nCes résultats sont des sources à consulter ; leur contenu doit être vérifié.";
+  } catch (error) {
+    console.warn("Recherche Web indisponible :", error);
+    return null;
+  }
+}, 40);
 aiCore.registerEngine("neural", ({ message }) => neuralEngine.respond(message), 10);
 
 function bytesToIds(text) { return Array.from(encoder.encode(text)); }
