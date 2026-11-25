@@ -16,9 +16,9 @@ function json(data: unknown, status = 200) {
 function clean(value: string) {
   return value.replace(/<[^>]*>/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"')
     .replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-    .replace(/&#(\\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
-    .replace(/&#x([\\da-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
-    .replace(/\\s+/g, " ").trim();
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([\da-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/\s+/g, " ").trim();
 }
 function decodeUrl(value: string) {
   try {
@@ -33,13 +33,13 @@ function isSafePublicUrl(value: string) {
     const host = url.hostname.toLowerCase();
     if (url.protocol !== "https:" || url.username || url.password) return false;
     if (!host.includes(".") || host === "localhost" || host.endsWith(".local") || host.endsWith(".internal")) return false;
-    if (/^(127\\.|10\\.|192\\.168\\.|169\\.254\\.|0\\.|172\\.(1[6-9]|2\\d|3[01])\\.)/.test(host)) return false;
+    if (/^(127\.|10\.|192\.168\.|169\.254\.|0\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host)) return false;
     if (host === "::1" || host.startsWith("fc") || host.startsWith("fd") || host.startsWith("fe80:")) return false;
     return true;
   } catch { return false; }
 }
 function isRestrictedQuery(query: string) {
-  return /\\b(gun|firearm|ammunition|weapon|explosive|bomb|knife|switchblade|taser|pepper spray|how to make a weapon|drug|cocaine|heroin|meth|fentanyl|marijuana|cannabis|vape|nicotine|alcohol|porn|pornography|gambling|sports betting|suicide|self[- ]harm|cutting myself|dangerous challenge|choking game|stunt challenge|arme|munitions|explosif|bombe|couteau|drogue|cocaïne|héroïne|cannabis|vapotage|alcool|pornographie|suicide|automutilation|jeu dangereux)\\b/i.test(query);
+  return /\b(gun|firearm|ammunition|weapon|explosive|bomb|knife|switchblade|taser|pepper spray|how to make a weapon|drug|cocaine|heroin|meth|fentanyl|marijuana|cannabis|vape|nicotine|alcohol|porn|pornography|gambling|sports betting|suicide|self[- ]harm|cutting myself|dangerous challenge|choking game|stunt challenge|arme|munitions|explosif|bombe|couteau|drogue|cocaïne|héroïne|cannabis|vapotage|alcool|pornographie|suicide|automutilation|jeu dangereux)\b/i.test(query);
 }
 async function readLimited(response: Response, maxBytes = 220_000) {
   if (!response.body) return "";
@@ -61,10 +61,10 @@ async function readLimited(response: Response, maxBytes = 220_000) {
   return new TextDecoder("utf-8", { fatal: false }).decode(merged);
 }
 function summarize(text: string, query: string) {
-  const sentences = text.split(/(?<=[.!?])\\s+/).map((s) => s.trim()).filter((s) => s.length >= 45 && s.length <= 420);
-  const terms = query.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").match(/[a-z0-9]{4,}/g) || [];
+  const sentences = text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter((s) => s.length >= 45 && s.length <= 420);
+  const terms = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").match(/[a-z0-9]{4,}/g) || [];
   const ranked = sentences.map((sentence, index) => {
-    const normalized = sentence.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");
+    const normalized = sentence.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const hits = terms.filter((term) => normalized.includes(term)).length;
     return { sentence, index, score: hits / Math.max(1, terms.length) + Math.min(sentence.length, 240) / 2400 };
   }).filter((item) => item.score > 0.08).sort((a, b) => b.score - a.score).slice(0, 3).sort((a, b) => a.index - b.index);
@@ -93,13 +93,13 @@ async function fetchPage(url: string, query: string) {
     }
     if (!response?.ok) return null;
     const type = response.headers.get("content-type") || "";
-    if (!/text\\/(html|plain)|application\\/(xhtml\\+xml|xml)/i.test(type)) return null;
+    if (!/text\/(html|plain)|application\/(xhtml\+xml|xml)/i.test(type)) return null;
     const raw = await readLimited(response);
-    const title = clean(raw.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i)?.[1] || "");
+    const title = clean(raw.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || "");
     const withoutNoise = raw
-      .replace(/<(script|style|noscript|svg|nav|footer|header|aside)\\b[\\s\\S]*?<\\/\\1>/gi, " ")
-      .replace(/<(main|article)\\b[^>]*>/gi, " ")
-      .replace(/<\\/(main|article)>/gi, " ");
+      .replace(/<(script|style|noscript|svg|nav|footer|header|aside)\b[\s\S]*?<\/\1>/gi, " ")
+      .replace(/<(main|article)\b[^>]*>/gi, " ")
+      .replace(/<\/(main|article)>/gi, " ");
     const text = clean(withoutNoise).slice(0, 35_000);
     const summary = summarize(text, query);
     if (!summary) return null;
@@ -136,11 +136,11 @@ Deno.serve(async (req: Request) => {
     if (!response.ok) return json({ error: "Le moteur de recherche est momentanément indisponible." }, 502);
     const xml = (await response.text()).slice(0, 1_500_000);
     const results: Array<{ title: string; url: string; snippet: string }> = [];
-    for (const match of xml.matchAll(/<item>([\\s\\S]*?)<\\/item>/gi)) {
+    for (const match of xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)) {
       const item = match[1];
-      const title = clean(item.match(/<title>([\\s\\S]*?)<\\/title>/i)?.[1] || "");
-      const url = decodeUrl(clean(item.match(/<link>([\\s\\S]*?)<\\/link>/i)?.[1] || ""));
-      const snippet = clean(item.match(/<description>([\\s\\S]*?)<\\/description>/i)?.[1] || "");
+      const title = clean(item.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || "");
+      const url = decodeUrl(clean(item.match(/<link>([\s\S]*?)<\/link>/i)?.[1] || ""));
+      const snippet = clean(item.match(/<description>([\s\S]*?)<\/description>/i)?.[1] || "");
       if (!title || !url || !isSafePublicUrl(url) || new URL(url).hostname.endsWith("bing.com")) continue;
       results.push({ title: title.slice(0, 180), url, snippet: snippet.slice(0, 420) });
       if (results.length >= 5) break;
@@ -157,7 +157,7 @@ Deno.serve(async (req: Request) => {
     return json({
       query,
       results: enriched,
-      summary: enriched.map((item, index) => (index + 1) + ". " + item.pageTitle + " : " + item.summary).join("\\n\\n").slice(0, 2_800),
+      summary: enriched.map((item, index) => (index + 1) + ". " + item.pageTitle + " : " + item.summary).join("\n\n").slice(0, 2_800),
       provider: "Bing",
       searchedAt: new Date().toISOString(),
     });
