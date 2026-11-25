@@ -10,17 +10,22 @@ function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
 }
 function clean(value: string) {
-  return value.replace(/<[^>]*>/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/\s+/g, " ").trim();
+  return value.replace(/<[^>]*>/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"')
+    .replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/\s+/g, " ").trim();
 }
 function decodeUrl(value: string) {
   try {
     const url = new URL(value, "https://duckduckgo.com");
     if (url.hostname.endsWith("duckduckgo.com") && url.pathname === "/l/") {
       const target = url.searchParams.get("uddg");
-      if (target) return decodeURIComponent(target);
+      if (target) return target;
     }
     return url.href;
   } catch { return ""; }
+}
+function isRestrictedQuery(query: string) {
+  return /\b(gun|firearm|ammunition|weapon|explosive|bomb|knife|switchblade|taser|pepper spray|how to make a weapon|drug|cocaine|heroin|meth|fentanyl|marijuana|cannabis|vape|nicotine|alcohol|porn|pornography|gambling|sports betting|suicide|self[- ]harm|cutting myself|dangerous challenge|choking game|stunt challenge)\b/i.test(query);
 }
 Deno.serve(async (req: Request) => {
   const origin = req.headers.get("origin");
@@ -39,23 +44,24 @@ Deno.serve(async (req: Request) => {
     const body = await req.json();
     const query = typeof body?.query === "string" ? body.query.trim().slice(0, 300) : "";
     if (query.length < 3) return json({ error: "La recherche doit contenir au moins 3 caractères." }, 400);
+    if (isRestrictedQuery(query)) return json({ error: "Cette recherche n'est pas disponible dans LoganAI." }, 403);
     const response = await fetch("https://html.duckduckgo.com/html/?q=" + encodeURIComponent(query), {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; LoganAI/1.0)", "Accept": "text/html" },
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; LoganAI/1.0; +https://leloganator-gaming.github.io/LoganAI/)", "Accept": "text/html" },
       signal: AbortSignal.timeout(8_000),
     });
     if (!response.ok) return json({ error: "Le moteur de recherche est momentanément indisponible." }, 502);
     const html = (await response.text()).slice(0, 1_500_000);
-    const blocks = html.match(/<div class="result[^"]*"[s\S]*?<\/div>\s*<\/div>/gi) || [];
     const results: Array<{ title: string; url: string; snippet: string }> = [];
-    for (const block of blocks) {
-      const link = block.match(/<a[^>]*class="result__a"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
-      if (!link) continue;
-      const url = decodeUrl(link[1]);
-      if (!url || !/^https?:\/\//i.test(url) || url.includes("duckduckgo.com")) continue;
-      const snippetMatch = block.match(/class="result__snippet"[^>]*>([\s\S]*?)<\/[^>]+>/i);
-      results.push({ title: clean(link[2]).slice(0, 180), url, snippet: clean(snippetMatch?.[1] || "").slice(0, 420) });
+    const pattern = /<a[^>]*class="result__a"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>([\s\S]*?)(?=<a[^>]*class="result__a"|$)/gi;
+    for (const match of html.matchAll(pattern)) {
+      const url = decodeUrl(match[1]);
+      if (!url || !/^https?:\/\//i.test(url) || new URL(url).hostname.endsWith("duckduckgo.com")) continue;
+      const snippetMatch = match[3].match(/class="result__snippet"[^>]*>([\s\S]*?)<\/[^>]+>/i);
+      results.push({ title: clean(match[2]).slice(0, 180), url, snippet: clean(snippetMatch?.[1] || "").slice(0, 420) });
       if (results.length >= 5) break;
     }
     return json({ query, results, provider: "DuckDuckGo", searchedAt: new Date().toISOString() });
-  } catch { return json({ error: "Impossible d'effectuer la recherche pour le moment." }, 502); }
+  } catch {
+    return json({ error: "Impossible d'effectuer la recherche pour le moment." }, 502);
+  }
 });
