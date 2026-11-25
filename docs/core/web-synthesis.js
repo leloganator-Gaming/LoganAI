@@ -9,7 +9,9 @@
     return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
       .match(/[a-z0-9]{3,}/g)?.filter(w => !STOP.has(w)) || [];
   }
-  function stem(word) {\n    return word.replace(/(issements|issement|atrices|ateurs|ations|ation|ements|ement|iques|ique|istes|iste|ées|es|s)$/,"");\n  }\n  function sentences(value) {
+  function stem(word) {
+    return word.replace(/(issements|issement|atrices|ateurs|ations|ation|ements|ement|iques|ique|istes|iste|aires|aire|ées|es|s)$/,"");
+  }\n  function sentences(value) {
     return String(value || "").replace(/\s+/g," ").split(/(?<=[.!?])\s+/)
       .map(s => s.trim()).filter(s => s.length >= 45 && s.length <= 420);
   }
