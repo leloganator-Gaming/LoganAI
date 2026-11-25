@@ -19,10 +19,10 @@
 
   function detectIntent(query) {
     const q = String(query || "").toLowerCase();
-    if (/\\b(quand|date|année|heure|depuis)\\b/.test(q)) return "temporal";
-    if (/\\b(combien|prix|coût|pourcentage|nombre|chiffre)\\b/.test(q)) return "quantitative";
-    if (/\\b(compare|différence|versus|contre)\\b/.test(q)) return "comparison";
-    if (/\\b(pourquoi|cause|raison)\\b/.test(q)) return "causal";
+    if (/\b(quand|date|année|heure|depuis)\b/.test(q)) return "temporal";
+    if (/\b(combien|prix|coût|pourcentage|nombre|chiffre)\b/.test(q)) return "quantitative";
+    if (/\b(compare|différence|versus|contre)\b/.test(q)) return "comparison";
+    if (/\b(pourquoi|cause|raison)\b/.test(q)) return "causal";
     return "general";
   }
   function rankSentences(query, results) {
@@ -59,12 +59,12 @@
     const groups = new Map();
     for (const item of chosen) {
       const normalized = item.sentence.toLowerCase();
-      const numbers = normalized.match(/\\b\\d+(?:[.,]\\d+)?\\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\\b/g) || [];
+      const numbers = normalized.match(/\b\d+(?:[.,]\d+)?\s?(?:%|euros?|€|ans?|jours?|mois|km|m|kg)?\b/g) || [];
       for (const number of numbers) {
         const key = words(normalized).map(stem).filter(w => w.length > 3).slice(0,4).sort().join("|");
         if (!key) continue;
         if (!groups.has(key)) groups.set(key, new Set());
-        groups.get(key).add(number.replace(/\\s/g,""));
+        groups.get(key).add(number.replace(/\s/g,""));
       }
     }
     return [...groups.values()].some(values => values.size > 1);
