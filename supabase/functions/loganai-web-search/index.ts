@@ -52,12 +52,12 @@ Deno.serve(async (req: Request) => {
     if (!response.ok) return json({ error: "Le moteur de recherche est momentanément indisponible." }, 502);
     const xml = (await response.text()).slice(0, 1_500_000);
     const results: Array<{ title: string; url: string; snippet: string }> = [];
-    for (const match of xml.matchAll(/<item>([\\s\\S]*?)<\\/item>/gi)) {
+    for (const match of xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)) {
       const item = match[1];
-      const title = clean(item.match(/<title>([\\s\\S]*?)<\\/title>/i)?.[1] || "");
-      const url = decodeUrl(clean(item.match(/<link>([\\s\\S]*?)<\\/link>/i)?.[1] || ""));
-      const snippet = clean(item.match(/<description>([\\s\\S]*?)<\\/description>/i)?.[1] || "");
-      if (!title || !url || !/^https?:\\/\\//i.test(url) || new URL(url).hostname.endsWith("bing.com")) continue;
+      const title = clean(item.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || "");
+      const url = decodeUrl(clean(item.match(/<link>([\s\S]*?)<\/link>/i)?.[1] || ""));
+      const snippet = clean(item.match(/<description>([\s\S]*?)<\/description>/i)?.[1] || "");
+      if (!title || !url || !/^https?:\/\//i.test(url) || new URL(url).hostname.endsWith("bing.com")) continue;
       results.push({ title: title.slice(0, 180), url, snippet: snippet.slice(0, 420) });
       if (results.length >= 5) break;
     }
