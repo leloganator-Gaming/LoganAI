@@ -2,7 +2,7 @@ const endpoint = "https://bphfjhmmfwsnjnbnjkjl.supabase.co/functions/v1/loganai-
 const response = await fetch(endpoint, {
   method: "POST",
   headers: { "Content-Type": "application/json", "Origin": "https://leloganator-gaming.github.io" },
-  body: JSON.stringify({ query: "machine learning definition" }),
+  body: JSON.stringify({ query: "\"machine learning\"" }),
   signal: AbortSignal.timeout(15000)
 });
 if (!response.ok) throw new Error(`Web search HTTP ${response.status}: ${await response.text()}`);
