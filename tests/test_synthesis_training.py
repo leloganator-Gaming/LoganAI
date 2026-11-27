@@ -92,3 +92,21 @@ def test_checked_in_training_and_validation_corpora_fit_context():
         from loganai.synthesis_training import SYNTHESIS_CONFIG
         assert inputs.numel() <= SYNTHESIS_CONFIG.block_size
         assert torch.any(labels != -100)
+
+
+def test_training_and_validation_sets_are_disjoint_and_nonduplicated():
+    train = load_examples(Path("data/synthesis_train.jsonl"))
+    validation = load_examples(Path("data/synthesis_validation.jsonl"))
+    normalize = lambda text: " ".join(text.lower().split())
+    train_docs = [normalize(item["document"]) for item in train]
+    validation_docs = [normalize(item["document"]) for item in validation]
+    assert len(train_docs) == len(set(train_docs))
+    assert len(validation_docs) == len(set(validation_docs))
+    assert set(train_docs).isdisjoint(validation_docs)
+
+
+def test_summaries_are_not_full_document_copies():
+    examples = load_examples(Path("data/synthesis_train.jsonl")) + load_examples(Path("data/synthesis_validation.jsonl"))
+    for item in examples:
+        assert len(item["summary"]) < len(item["document"])
+        assert item["summary"].strip() != item["document"].strip()
