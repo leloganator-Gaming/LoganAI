@@ -1,6 +1,16 @@
 name: Train LoganAI synthesis model
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "loganai/synthesis_training.py"
+      - "loganai/synthesis_inference.py"
+      - "data/synthesis_train.jsonl"
+      - "data/synthesis_validation.jsonl"
+      - "tests/test_synthesis_training.py"
+      - "tests/test_synthesis_inference.py"
+      - ".github/workflows/synthesis-model.yml"
   workflow_dispatch:
     inputs:
       steps:
