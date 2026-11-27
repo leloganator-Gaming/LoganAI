@@ -4,6 +4,7 @@ const STORE_KEY = "loganai.browser.v1";
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8");
 let session = null;
+let synthesisSession = null;
 let lastAssistant = "";
 const knowledgeEngine = window.LoganAIKnowledge.createEngine();
 const aiCore = window.LoganAI.createCore({ fallback: unknownAnswer });
@@ -112,11 +113,17 @@ aiCore.registerEngine("web-search", async ({ message }) => {
     const sources = data.results.slice(0, 5).map((item, index) =>
       (index + 1) + ". " + item.title + " [" + (item.contentExtracted ? "page analysée" : "extrait moteur") + "]\n" + item.url
     );
-    const summary = window.LoganAIWebSynthesis
+    const algorithmicSummary = window.LoganAIWebSynthesis
       ? window.LoganAIWebSynthesis.synthesize(message, data.results)
       : (typeof data.summary === "string" ? data.summary.trim() : "");
+    const neuralSummary = synthesisSession
+      ? await generateWebSynthesis(data.results)
+      : null;
+    const summary = neuralSummary || algorithmicSummary;
     if (!summary) return null;
-    return "Synthèse réalisée par le moteur maison LoganAI (" + data.provider + ") :\n\n" + summary
+    return (neuralSummary
+      ? "Synthèse expérimentale du modèle neuronal maison LoganAI (" + data.provider + ") :\n\n"
+      : "Synthèse algorithmique LoganAI (" + data.provider + ") :\n\n") + summary
       + "\n\nSources :\n" + sources.join("\n\n")
       + "\n\nLa synthèse est automatique et peut être incomplète. Consultez les sources pour vérifier les détails.";
   } catch (error) {
@@ -127,6 +134,39 @@ aiCore.registerEngine("web-search", async ({ message }) => {
 aiCore.registerEngine("neural", ({ message }) => neuralEngine.respond(message), 10);
 
 function bytesToIds(text) { return Array.from(encoder.encode(text)); }
+
+async function generateWebSynthesis(results) {
+  const prefix = "Tâche : résume fidèlement le document sans ajouter d'information.\\nDocument :\\n";
+  const separator = "\\nSynthèse :\\n";
+  const document = results.slice(0, 3).map((item, index) =>
+    "Source " + (index + 1) + " : " + (item.pageTitle || item.title || "") + "\\n"
+    + (item.summary || item.snippet || "")
+  ).join("\\n\\n");
+  const fixed = bytesToIds(prefix + separator);
+  const available = 768 - fixed.length;
+  if (available < 80) return null;
+  let documentIds = bytesToIds(document).slice(0, available);
+  let safeDocument = decoder.decode(new Uint8Array(documentIds));
+  safeDocument = safeDocument.includes(" ") ? safeDocument.slice(0, safeDocument.lastIndexOf(" ")) : safeDocument;
+  const ids = bytesToIds(prefix + safeDocument + separator);
+  const generated = [];
+  let decoded = "";
+  for (let step = 0; step < 140; step++) {
+    const context = ids.slice(-768);
+    const input = new ort.Tensor("int64", BigInt64Array.from(context, (value) => BigInt(value)), [1, context.length]);
+    const output = await synthesisSession.run({input_ids: input});
+    const logits = output.logits.data;
+    const offset = (context.length - 1) * 256;
+    let next = 0;
+    for (let i = 1; i < 256; i++) if (logits[offset + i] > logits[offset + next]) next = i;
+    generated.push(next);
+    ids.push(next);
+    decoded = decoder.decode(new Uint8Array(generated));
+    if (decoded.includes("Fin de synthèse.")) break;
+  }
+  const answer = decoded.split("Fin de synthèse.")[0].trim();
+  return answer.length >= 45 && isReadableFrench(answer) ? answer : null;
+}
 function softmaxSample(logits, temperature = 0.68, topK = 24) {
   const candidates = Array.from(logits, (value, id) => ({id, value: value / temperature}))
     .sort((a, b) => b.value - a.value).slice(0, topK);
@@ -174,6 +214,12 @@ async function loadModel() {
     if (!window.ort) throw new Error("La bibliothèque ONNX Runtime Web n'a pas pu être chargée.");
     ort.env.wasm.numThreads = Math.min(4, navigator.hardwareConcurrency || 1);
     session = await ort.InferenceSession.create("./model.onnx", {executionProviders: ["wasm"]});
+    try {
+      synthesisSession = await ort.InferenceSession.create("./synthesis-model.onnx", {executionProviders: ["wasm"]});
+    } catch (synthesisError) {
+      console.warn("Modèle neuronal de synthèse indisponible :", synthesisError);
+      synthesisSession = null;
+    }
     $("#prompt").disabled = false; $("#prompt").placeholder = "Écrivez un message à LoganAI…";
     $("#chatForm button").disabled = false; $("#composerNote").textContent = knowledgeEngine.size
       ? "Base de connaissances française chargée."
