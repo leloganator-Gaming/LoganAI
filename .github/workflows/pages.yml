@@ -61,7 +61,9 @@ jobs:
         run: cp data/train_corpus.txt docs/knowledge.txt
       - name: Train the browser model on the expanded corpus
         run: python -m loganai.training --steps 2400 --batch-size 2 --eval-interval 100 --save-interval 800
-      - name: Export model to ONNX
+      - name: Train the independent synthesis model from scratch
+        run: python -m loganai.synthesis_training --steps 800 --batch-size 4 --eval-interval 100
+      - name: Export conversation and synthesis models to ONNX
         run: python export_onnx.py
       - name: Validate ONNX model
         run: |
@@ -71,7 +73,11 @@ jobs:
           session = ort.InferenceSession("docs/model.onnx", providers=["CPUExecutionProvider"])
           result = session.run(["logits"], {"input_ids": np.zeros((1, 12), dtype=np.int64)})[0]
           assert result.shape == (1, 12, 256), result.shape
-          print("ONNX validé :", result.shape)
+          print("ONNX conversationnel validé :", result.shape)
+          synthesis = ort.InferenceSession("docs/synthesis-model.onnx", providers=["CPUExecutionProvider"])
+          summary_logits = synthesis.run(["logits"], {"input_ids": np.zeros((1, 32), dtype=np.int64)})[0]
+          assert summary_logits.shape == (1, 32, 256), summary_logits.shape
+          print("ONNX synthèse validé :", summary_logits.shape)
           PY
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
