@@ -4,11 +4,14 @@ import pytest
 import torch
 
 from loganai.synthesis_training import (
+    PREFIX,
+    SEPARATOR,
     encode_examples,
-    format_example,
     get_batch,
     load_examples,
+    prepare_example,
 )
+from loganai.tokenizer import LoganTokenizer
 
 
 def sample():
@@ -23,13 +26,6 @@ def sample():
             "Leur rendement dépend notamment de l'ensoleillement et de l'orientation."
         ),
     }
-
-
-def test_format_keeps_document_and_target_separated():
-    text = format_example(sample())
-    assert "Document :" in text
-    assert "Synthèse :" in text
-    assert "cellules photovoltaïques" in text
 
 
 def test_jsonl_dataset_loads_and_validates(tmp_path):
@@ -48,15 +44,30 @@ def test_jsonl_rejects_malformed_and_short_examples(tmp_path):
         load_examples(path)
 
 
-def test_synthesis_corpus_encodes_as_independent_byte_stream():
-    encoded = encode_examples([sample()])
-    assert encoded.dtype == torch.long
-    assert encoded.numel() > 100
-    assert int(encoded.min()) >= 0 and int(encoded.max()) < 256
+def test_training_masks_document_and_learns_only_summary_tokens():
+    inputs, labels = prepare_example(sample())
+    tokenizer = LoganTokenizer()
+    prefix_length = len(tokenizer.encode(PREFIX + sample()["document"] + SEPARATOR))
+    assert inputs.dtype == torch.long
+    assert labels.dtype == torch.long
+    assert torch.all(labels[:prefix_length - 1] == -100)
+    assert torch.any(labels[prefix_length - 1:] != -100)
+    assert inputs.numel() == labels.numel()
 
 
-def test_synthesis_batches_have_next_byte_targets():
-    source = torch.arange(1200, dtype=torch.long) % 256
-    x, y = get_batch(source, batch_size=2, block_size=32, device="cpu")
-    assert x.shape == (2, 32)
-    assert torch.equal(y[:, :-1], x[:, 1:])
+def test_synthesis_corpus_encodes_as_independent_examples():
+    encoded = encode_examples([sample(), sample()])
+    assert len(encoded) == 2
+    for inputs, labels in encoded:
+        assert inputs.numel() > 100
+        assert int(inputs.min()) >= 0 and int(inputs.max()) < 256
+        assert torch.any(labels != -100)
+
+
+def test_synthesis_batches_pad_without_training_on_padding():
+    examples = encode_examples([sample(), sample()])
+    x, y = get_batch(examples, batch_size=3, device="cpu")
+    assert x.shape == y.shape
+    assert x.shape[0] == 3
+    assert torch.any(y != -100)
+    assert torch.all(y >= -100)
