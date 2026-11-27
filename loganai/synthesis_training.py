@@ -1,8 +1,7 @@
-"""Entraînement indépendant du modèle de synthèse LoganAI.
+"""Entraînement supervisé du modèle de synthèse LoganAI, initialisé de zéro.
 
 Données JSONL : chaque ligne contient {"document": "...", "summary": "..."}.
-Les poids et l'état d'optimisation sont séparés du modèle conversationnel.
-Aucun checkpoint préentraîné ni service externe n'est utilisé.
+La perte est calculée uniquement sur la synthèse cible, jamais sur le document source.
 """
 import argparse
 import json
@@ -16,16 +15,18 @@ from .tokenizer import LoganTokenizer
 
 SYNTHESIS_CONFIG = ModelConfig(
     vocab_size=256,
-    block_size=512,
-    n_embd=128,
+    block_size=768,
+    n_embd=64,
     n_head=4,
-    n_layer=4,
+    n_layer=2,
     dropout=0.1,
 )
 DEFAULT_TRAIN = Path("data/synthesis_train.jsonl")
 DEFAULT_VALIDATION = Path("data/synthesis_validation.jsonl")
 DEFAULT_CHECKPOINT = Path("checkpoints/loganai_synthesis.pt")
-DEFAULT_STATE = Path("checkpoints/loganai_synthesis_state.pt")
+PREFIX = "Tâche : résume fidèlement le document sans ajouter d'information.\nDocument :\n"
+SEPARATOR = "\nSynthèse :\n"
+SUFFIX = "\nFin de synthèse.\n"
 
 
 def load_examples(path: Path) -> list[dict[str, str]]:
@@ -39,8 +40,7 @@ def load_examples(path: Path) -> list[dict[str, str]]:
             item = json.loads(raw)
         except json.JSONDecodeError as error:
             raise ValueError(f"JSON invalide ligne {line_number} dans {path}: {error}") from error
-        document = item.get("document")
-        summary = item.get("summary")
+        document, summary = item.get("document"), item.get("summary")
         if not isinstance(document, str) or not isinstance(summary, str):
             raise ValueError(f"Champs document/summary manquants ligne {line_number}")
         document, summary = document.strip(), summary.strip()
@@ -54,40 +54,55 @@ def load_examples(path: Path) -> list[dict[str, str]]:
     return examples
 
 
-def format_example(example: dict[str, str]) -> str:
-    return (
-        "Tâche : produire une synthèse fidèle du document.\n"
-        "Document :\n" + example["document"] +
-        "\nSynthèse :\n" + example["summary"] + "\nFin de synthèse.\n\n"
-    )
-
-
-def encode_examples(examples: list[dict[str, str]]) -> torch.Tensor:
-    tokenizer = LoganTokenizer()
-    text = "".join(format_example(item) for item in examples)
-    return torch.tensor(tokenizer.encode(text), dtype=torch.long)
-
-
-def get_batch(source: torch.Tensor, batch_size: int, block_size: int, device: str):
-    if len(source) <= block_size + 1:
+def prepare_example(example: dict[str, str], tokenizer=None):
+    tokenizer = tokenizer or LoganTokenizer()
+    prefix = PREFIX + example["document"].strip() + SEPARATOR
+    target = example["summary"].strip() + SUFFIX
+    prefix_ids = tokenizer.encode(prefix)
+    target_ids = tokenizer.encode(target)
+    all_ids = prefix_ids + target_ids
+    if len(all_ids) < 2:
+        raise ValueError("Exemple de synthèse vide.")
+    if len(all_ids) > SYNTHESIS_CONFIG.block_size + 1:
         raise ValueError(
-            f"Corpus de synthèse trop court ({len(source)} octets) "
-            f"pour un contexte de {block_size}."
+            f"Exemple trop long : {len(all_ids)} octets, maximum "
+            f"{SYNTHESIS_CONFIG.block_size + 1}. Raccourcissez le document ou sa synthèse."
         )
-    starts = torch.randint(0, len(source) - block_size - 1, (batch_size,))
-    x = torch.stack([source[i:i + block_size] for i in starts]).to(device)
-    y = torch.stack([source[i + 1:i + block_size + 1] for i in starts]).to(device)
-    return x, y
+    inputs = torch.tensor(all_ids[:-1], dtype=torch.long)
+    labels = torch.tensor(all_ids[1:], dtype=torch.long)
+    # Le modèle reçoit le document en contexte, mais n'est récompensé que
+    # lorsqu'il prédit les octets de la synthèse et son marqueur de fin.
+    labels[:len(prefix_ids) - 1] = -100
+    return inputs, labels
+
+
+def encode_examples(examples: list[dict[str, str]]):
+    tokenizer = LoganTokenizer()
+    return [prepare_example(item, tokenizer) for item in examples]
+
+
+def get_batch(examples, batch_size: int, device: str):
+    if not examples:
+        raise ValueError("Aucun exemple pour former un lot.")
+    selected = torch.randint(0, len(examples), (batch_size,)).tolist()
+    batch = [examples[index] for index in selected]
+    max_length = max(len(x) for x, _ in batch)
+    x = torch.zeros((batch_size, max_length), dtype=torch.long)
+    y = torch.full((batch_size, max_length), -100, dtype=torch.long)
+    for row, (inputs, labels) in enumerate(batch):
+        x[row, :len(inputs)] = inputs
+        y[row, :len(labels)] = labels
+    return x.to(device), y.to(device)
 
 
 @torch.no_grad()
 def evaluate(model, train_data, validation_data, batch_size, device, batches=4):
     model.eval()
     scores = {}
-    for label, source in (("train", train_data), ("validation", validation_data)):
+    for label, examples in (("train", train_data), ("validation", validation_data)):
         losses = []
         for _ in range(batches):
-            x, y = get_batch(source, batch_size, SYNTHESIS_CONFIG.block_size, device)
+            x, y = get_batch(examples, batch_size, device)
             _, loss = model(x, y)
             losses.append(float(loss.item()))
         scores[label] = sum(losses) / len(losses)
@@ -109,10 +124,8 @@ def main():
     if args.steps < 1 or args.batch_size < 1:
         raise SystemExit("--steps et --batch-size doivent être positifs.")
 
-    train_examples = load_examples(args.train)
-    validation_examples = load_examples(args.validation)
-    train_data = encode_examples(train_examples)
-    validation_data = encode_examples(validation_examples)
+    train_examples = encode_examples(load_examples(args.train))
+    validation_examples = encode_examples(load_examples(args.validation))
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.manual_seed(73)
     model = LoganLanguageModel(SYNTHESIS_CONFIG).to(device)
@@ -130,23 +143,24 @@ def main():
     print(f"Modèle de synthèse initialisé de zéro | appareil : {device}")
     print(f"Exemples : {len(train_examples)} entraînement / {len(validation_examples)} validation")
     print(f"Paramètres entraînables : {sum(p.numel() for p in model.parameters()):,}")
+    print("Objectif : prédire la synthèse cible uniquement, à partir du document fourni.")
     model.train()
     for step in range(start_step + 1, start_step + args.steps + 1):
-        x, y = get_batch(train_data, args.batch_size, SYNTHESIS_CONFIG.block_size, device)
+        x, y = get_batch(train_examples, args.batch_size, device)
         _, loss = model(x, y)
         optimizer.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
         if step == 1 or step % args.eval_interval == 0:
-            scores = evaluate(model, train_data, validation_data, args.batch_size, device)
+            scores = evaluate(model, train_examples, validation_examples, args.batch_size, device)
             print(f"Étape {step} | perte train {scores['train']:.4f} | validation {scores['validation']:.4f}")
 
     args.checkpoint.parent.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), args.checkpoint)
     torch.save({"optimizer": optimizer.state_dict(), "step": start_step + args.steps}, state_path)
     print(f"Poids du modèle de synthèse sauvegardés : {args.checkpoint}")
-    print("La perte ne suffit pas à valider la fidélité des synthèses : des évaluations dédiées restent nécessaires.")
+    print("La perte ne suffit pas à valider la fidélité : des tests de synthèses réelles restent nécessaires.")
 
 
 if __name__ == "__main__":
