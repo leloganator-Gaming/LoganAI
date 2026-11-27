@@ -28,6 +28,7 @@ jobs:
     timeout-minutes: 45
     env:
       PYTHONPATH: .
+      SYNTHESIS_STEPS: ${{ github.event.inputs.steps || '300' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -44,7 +45,7 @@ jobs:
       - name: Entraîner le modèle de synthèse depuis zéro
         run: >-
           python -m loganai.synthesis_training
-          --steps ${{ inputs.steps || '300' }}
+          --steps "$SYNTHESIS_STEPS"
           --batch-size 2
           --eval-interval 50
       - name: Conserver les poids entraînés
