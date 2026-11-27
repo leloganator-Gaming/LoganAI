@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pytest
 import torch
@@ -71,3 +72,23 @@ def test_synthesis_batches_pad_without_training_on_padding():
     assert x.shape[0] == 3
     assert torch.any(y != -100)
     assert torch.all(y >= -100)
+
+def test_long_documents_are_trimmed_to_the_model_context():
+    long_example = {
+        "document": ("Un document français décrit un phénomène avec plusieurs détails. " * 40),
+        "summary": sample()["summary"],
+    }
+    inputs, labels = prepare_example(long_example)
+    from loganai.synthesis_training import SYNTHESIS_CONFIG
+    assert inputs.numel() <= SYNTHESIS_CONFIG.block_size
+    assert labels.numel() == inputs.numel()
+    assert torch.any(labels != -100)
+
+
+def test_checked_in_training_and_validation_corpora_fit_context():
+    train = load_examples(Path("data/synthesis_train.jsonl"))
+    validation = load_examples(Path("data/synthesis_validation.jsonl"))
+    for inputs, labels in encode_examples(train + validation):
+        from loganai.synthesis_training import SYNTHESIS_CONFIG
+        assert inputs.numel() <= SYNTHESIS_CONFIG.block_size
+        assert torch.any(labels != -100)
