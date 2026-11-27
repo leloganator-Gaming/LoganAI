@@ -56,18 +56,27 @@ def load_examples(path: Path) -> list[dict[str, str]]:
 
 def prepare_example(example: dict[str, str], tokenizer=None):
     tokenizer = tokenizer or LoganTokenizer()
-    prefix = PREFIX + example["document"].strip() + SEPARATOR
     target = example["summary"].strip() + SUFFIX
-    prefix_ids = tokenizer.encode(prefix)
     target_ids = tokenizer.encode(target)
+    fixed_prefix_ids = tokenizer.encode(PREFIX + SEPARATOR)
+    document_ids = tokenizer.encode(example["document"].strip())
+    available_document_bytes = (
+        SYNTHESIS_CONFIG.block_size + 1
+        - len(fixed_prefix_ids)
+        - len(target_ids)
+    )
+    if available_document_bytes < 80:
+        raise ValueError("La synthèse cible est trop longue pour le contexte du modèle.")
+    if len(document_ids) > available_document_bytes:
+        # Coupe à une frontière de mot, sans casser un caractère UTF-8.
+        raw_document = bytes(document_ids[:available_document_bytes])
+        shortened = raw_document.decode("utf-8", errors="ignore")
+        shortened = shortened.rsplit(" ", 1)[0] if " " in shortened else shortened
+        document_ids = tokenizer.encode(shortened)
+    prefix_ids = fixed_prefix_ids[:-len(tokenizer.encode(SEPARATOR))] + document_ids + tokenizer.encode(SEPARATOR)
     all_ids = prefix_ids + target_ids
-    if len(all_ids) < 2:
-        raise ValueError("Exemple de synthèse vide.")
-    if len(all_ids) > SYNTHESIS_CONFIG.block_size + 1:
-        raise ValueError(
-            f"Exemple trop long : {len(all_ids)} octets, maximum "
-            f"{SYNTHESIS_CONFIG.block_size + 1}. Raccourcissez le document ou sa synthèse."
-        )
+    if len(all_ids) < 2 or len(all_ids) > SYNTHESIS_CONFIG.block_size + 1:
+        raise ValueError("Impossible de préparer cet exemple dans la fenêtre de contexte.")
     inputs = torch.tensor(all_ids[:-1], dtype=torch.long)
     labels = torch.tensor(all_ids[1:], dtype=torch.long)
     # Le modèle reçoit le document en contexte, mais n'est récompensé que
