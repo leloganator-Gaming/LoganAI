@@ -1,5 +1,9 @@
 name: Train LoganAI synthesis model
 
+concurrency:
+  group: synthesis-model-training
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main]
@@ -16,7 +20,7 @@ on:
       steps:
         description: "Nombre d'étapes d'entraînement"
         required: true
-        default: "300"
+        default: "800"
         type: string
 
 permissions:
@@ -28,7 +32,7 @@ jobs:
     timeout-minutes: 45
     env:
       PYTHONPATH: .
-      SYNTHESIS_STEPS: ${{ github.event.inputs.steps || '300' }}
+      SYNTHESIS_STEPS: ${{ github.event.inputs.steps || '800' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -46,8 +50,8 @@ jobs:
         run: >-
           python -m loganai.synthesis_training
           --steps "$SYNTHESIS_STEPS"
-          --batch-size 2
-          --eval-interval 50
+          --batch-size 4
+          --eval-interval 100
       - name: Conserver les poids entraînés
         uses: actions/upload-artifact@v4
         with:
